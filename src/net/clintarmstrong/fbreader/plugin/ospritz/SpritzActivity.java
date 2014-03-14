@@ -283,7 +283,6 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
     }
 
     private void switchOff() {
-        final SpritzerTextView view = (SpritzerTextView) findViewById(R.id.spritzTV);
         stopSpritzing();
         try {
             myApi.clearHighlighting();
@@ -354,5 +353,12 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         if (mSpritzer.isPlaying()) {
             mSpritzerTextView.pause();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        stopSpritzing();
+        switchOff();
+        super.onDestroy();
     }
 }
