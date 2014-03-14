@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger>
+
+    <dataSet config="19.0.1" >
+        <source path="D:\carmstrong\development\workspace_eclipse\FB-OSpritz\build\exploded-aar\com.android.support\appcompat-v7\19.0.1\assets" />
+    </dataSet>
+    <dataSet config="0.2.0" >
+        <source path="D:\carmstrong\development\workspace_eclipse\FB-OSpritz\build\exploded-aar\com.andrewgiang.spritzertextview\library\0.2.0\assets" />
+    </dataSet>
+    <dataSet config="main" >
+        <source path="D:\carmstrong\development\workspace_eclipse\FB-OSpritz\assets" />
+    </dataSet>
+    <dataSet config="release" >
+        <source path="D:\carmstrong\development\workspace_eclipse\FB-OSpritz\build-types\release\assets" />
+    </dataSet>
+
+</merger>
