@@ -1,6 +1,6 @@
 /*
  * This file is auto-generated.  DO NOT MODIFY.
- * Original file: D:\\carmstrong\\development\\workspace_eclipse\\OSpritz\\src\\org\\geometerplus\\android\\fbreader\\api\\ApiInterface.aidl
+ * Original file: D:\\carmstrong\\development\\workspace_eclipse\\FB-OSpritz\\src\\org\\geometerplus\\android\\fbreader\\api\\ApiInterface.aidl
  */
 package org.geometerplus.android.fbreader.api;
 public interface ApiInterface extends android.os.IInterface

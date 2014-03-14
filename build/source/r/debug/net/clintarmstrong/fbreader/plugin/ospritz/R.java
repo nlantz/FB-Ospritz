@@ -880,7 +880,6 @@ containing a value of this type.
         public static final int activity_chooser_view_content=0x7f070025;
         public static final int always=0x7f07000f;
         public static final int beginning=0x7f07000a;
-        public static final int button=0x7f070045;
         public static final int button_close=0x7f070040;
         public static final int button_next_paragraph=0x7f07003f;
         public static final int button_pause=0x7f07003e;
@@ -920,24 +919,23 @@ containing a value of this type.
         public static final int search_plate=0x7f070036;
         public static final int search_src_text=0x7f070037;
         public static final int search_voice_btn=0x7f07003b;
-        public static final int seekBarTextSize=0x7f070046;
-        public static final int seekBarWpm=0x7f070044;
+        public static final int seekBarTextSize=0x7f070045;
+        public static final int seekBarWpm=0x7f070043;
         public static final int shortcut=0x7f07002e;
         public static final int showCustom=0x7f070007;
         public static final int showHome=0x7f070004;
         public static final int showTitle=0x7f070006;
-        public static final int speed_control=0x7f070047;
         public static final int split_action_bar=0x7f07001e;
         public static final int spritzTV=0x7f070041;
         public static final int submit_area=0x7f070039;
         public static final int tabMode=0x7f070002;
-        public static final int textView=0x7f070042;
-        public static final int textView2=0x7f070043;
+        public static final int text_size_text=0x7f070044;
         public static final int title=0x7f07002b;
         public static final int top_action_bar=0x7f070020;
         public static final int up=0x7f070021;
         public static final int useLogo=0x7f070003;
         public static final int withText=0x7f070010;
+        public static final int wpm_text=0x7f070042;
     }
     public static final class integer {
         public static final int abc_max_action_buttons=0x7f090000;
@@ -993,8 +991,7 @@ containing a value of this type.
         public static final int ospritz_menu_item=0x7f0a0014;
         public static final int seek_text_size=0x7f0a0015;
         public static final int seek_wpm=0x7f0a0016;
-        public static final int speed=0x7f0a0017;
-        public static final int title=0x7f0a0018;
+        public static final int title=0x7f0a0017;
     }
     public static final class style {
         public static final int PivotLetter=0x7f0b0000;
