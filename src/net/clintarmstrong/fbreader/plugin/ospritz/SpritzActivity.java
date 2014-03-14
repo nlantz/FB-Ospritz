@@ -26,6 +26,7 @@ import android.os.PowerManager;
 import android.os.SystemClock;
 import android.telephony.TelephonyManager;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.SeekBar;
 import android.telephony.PhoneStateListener;
 import android.widget.TextView;
@@ -308,11 +309,13 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
                         ((PowerManager) getSystemService(POWER_SERVICE))
                                 .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "FBReader OSpritz Plugin");
                 myWakeLock.acquire();
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             }
         } else {
             if (myWakeLock != null) {
                 myWakeLock.release();
                 myWakeLock = null;
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             }
         }
     }

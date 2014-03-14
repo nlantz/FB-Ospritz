@@ -1,4 +1,4 @@
-<!-- From: file:/D:/carmstrong/development/workspace_eclipse/FB-OSpritz/AndroidManifest.xml --><manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto" android:versionCode="2" android:versionName="1.01" package="net.clintarmstrong.fbreader.plugin.ospritz">
+<!-- From: file:/D:/carmstrong/development/workspace_eclipse/FB-OSpritz/AndroidManifest.xml --><manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto" android:versionCode="3" android:versionName="1.02" package="net.clintarmstrong.fbreader.plugin.ospritz">
 	<uses-sdk android:maxSdkVersion="19" android:minSdkVersion="19"/>
 	<supports-screens android:anyDensity="true" android:largeScreens="true" android:normalScreens="true" android:smallScreens="true"/>
 	<uses-permission android:name="android.permission.WAKE_LOCK"/>
