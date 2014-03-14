@@ -26,4 +26,8 @@ proguard/
 *.iml
 *.ipr
 *.iws
+<<<<<<< HEAD
 .idea
+=======
+.idea/
+>>>>>>> a7835a52d55c602e74746d52de9d639f18f9ea10
