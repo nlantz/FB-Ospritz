@@ -68,51 +68,26 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/seek_wpm"
-                android:id="@+id/textView"
-                android:layout_centerVertical="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignRight="@+id/textView2"
-                android:layout_alignEnd="@+id/textView2" />
+                android:id="@+id/wpm_text" />
 
             <SeekBar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/seekBarWpm"
-                android:layout_alignTop="@+id/textView2"
-                android:layout_toRightOf="@+id/textView2" />
+                android:max="200"
+                android:indeterminate="false" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/seek_text_size"
-                android:id="@+id/textView2"
-                android:layout_below="@+id/textView"
-                android:layout_marginTop="43dp"
-                android:layout_alignRight="@+id/button"
-                android:layout_alignEnd="@+id/button"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:id="@+id/text_size_text"
+                android:layout_marginTop="43dp" />
 
             <SeekBar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/seekBarTextSize"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/textView"
-                android:layout_alignRight="@+id/seekBarTextSize"
-                android:layout_alignEnd="@+id/seekBarTextSize" />
+                android:id="@+id/seekBarTextSize" />
         </LinearLayout>
     </RelativeLayout >
-	<TextView
-		android:paddingTop="5dp"
-		android:textAppearance="?android:attr/textAppearanceMedium"
-		android:text="@string/speed"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-	/>
-	<SeekBar android:id="@+id/speed_control"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-	/>
 </LinearLayout>

@@ -23,10 +23,12 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.SeekBar;
 import android.telephony.PhoneStateListener;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.geometerplus.android.fbreader.api.*;
@@ -39,8 +41,11 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
     private Spritzer mSpritzer;
     private SeekBar mSeekBarTextSize;
     private SeekBar mSeekBarWpm;
+    private TextView wpmTV;
+    private TextView TextSizeTV;
 
     private SharedPreferences myPreferences;
+    private SharedPreferences.Editor myEditor;
     private int myParagraphIndex = -1;
     private int myParagraphsNumber;
     private boolean myIsActive = false;
@@ -56,24 +61,24 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.control_panel);
 
-        myPreferences = getSharedPreferences("FBReaderTTS", MODE_PRIVATE);
+        wpmTV = (TextView) findViewById(R.id.wpm_text);
+        TextSizeTV = (TextView) findViewById(R.id.text_size_text);
+
+        myPreferences = getSharedPreferences("FBReaderOSpritz", MODE_PRIVATE);
 
         mSpritzerTextView = (SpritzerTextView) findViewById(R.id.spritzTV);
         mSpritzer = mSpritzerTextView.getSpritzer();
-        mSpritzerTextView.setSpritzText("OpenSpritz has nothing to do with Spritz Incorporated. " +
-                "This is an open source, community created project, made with love because Spritz is " +
-                "such an awesome technique for reading with.");
         mSeekBarTextSize = (SeekBar) findViewById(R.id.seekBarTextSize);
         mSeekBarWpm = (SeekBar) findViewById(R.id.seekBarWpm);
 
         setupSeekBars();
         // mSeekBarWpm.setProgress(mSpritzerTextView.getWpm());
-        // mSeekBarWpm.setProgress(250);
         mSeekBarWpm.setProgress(myPreferences.getInt("mSeekBarWpm", 250));
-        // mSeekBarTextSize.setProgress((int) mSpritzerTextView.getTextSize());
-        mSeekBarTextSize.setProgress(myPreferences.getInt("mSeekBarTextSize", (int) mSpritzerTextView.getTextSize()));
+        wpmTV.setText(getText(R.string.seek_wpm) + " " + myPreferences.getInt("mSeekBarWpm", 250));
 
-        final SpritzerTextView view = (SpritzerTextView) findViewById(R.id.spritzTV);
+                // mSeekBarTextSize.setProgress((int) mSpritzerTextView.getTextSize());
+        mSeekBarTextSize.setProgress(myPreferences.getInt("mSeekBarTextSize", (int) mSpritzerTextView.getTextSize()));
+        TextSizeTV.setText(getText(R.string.seek_text_size) + " " + myPreferences.getInt("mSeekBarTextSize", (int) mSpritzerTextView.getTextSize()));
 
         setListener(R.id.button_previous_paragraph, new View.OnClickListener() {
             public void onClick(View v) {
@@ -104,12 +109,28 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         setListener(R.id.button_play, new View.OnClickListener() {
             public void onClick(View v) {
                 setActive(true);
-                view.setSpritzText(gotoNextParagraph());
-                view.play();
+                mSpritzerTextView.setSpritzText(gotoNextParagraph());
+                mSpritzerTextView.play();
+                new Thread(new Runnable() {
+                    public void run() {
+                        while (myIsActive) {
+                            if (!mSpritzer.isPlaying()) {
+                                if (myParagraphIndex < myParagraphsNumber) {
+                                    ++myParagraphIndex;
+                                    mSpritzerTextView.setSpritzText(gotoNextParagraph());
+                                    mSpritzerTextView.play();
+                                    SystemClock.sleep(500);
+                                }
+                            }
+                        }
+                    }
+                }).start();
             }
+
+
         });
 
-        ((TelephonyManager)getSystemService(TELEPHONY_SERVICE)).listen(
+            ((TelephonyManager)getSystemService(TELEPHONY_SERVICE)).listen(
                 new PhoneStateListener() {
                     public void onCallStateChanged(int state, String incomingNumber) {
                         if (state == TelephonyManager.CALL_STATE_RINGING) {
@@ -138,6 +159,11 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     if (progress > 0) {
                         mSpritzerTextView.setWpm(progress);
+                        wpmTV.setText(getText(R.string.seek_wpm) + " " + progress);
+                        // getText(R.string.initialization_error)
+                        myEditor = myPreferences.edit();
+                        myEditor.putInt("mSeekBarWpm", progress);
+                        myEditor.commit();
                     }
                 }
 
@@ -153,7 +179,10 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     mSpritzerTextView.setTextSize(progress);
-
+                    TextSizeTV.setText(getText(R.string.seek_text_size) + " " + myPreferences.getInt("mSeekBarTextSize", (int) mSpritzerTextView.getTextSize()));
+                    myEditor = myPreferences.edit();
+                    myEditor.putInt("mSeekBarTextSize", progress);
+                    myEditor.commit();
                 }
 
                 @Override
@@ -192,8 +221,8 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
             myParagraphIndex = myApi.getPageStart().ParagraphIndex;
             myParagraphsNumber = myApi.getParagraphsNumber();
             setActionsEnabled(true);
-            setActive(true);
-            view.setSpritzText(gotoNextParagraph());
+            setActive(false);
+            // mSpritzerTextView.setSpritzText(gotoNextParagraph());
         } catch (ApiException e) {
             setActionsEnabled(false);
             showErrorMessage(getText(R.string.initialization_error), true);
