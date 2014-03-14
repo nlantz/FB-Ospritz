@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.geometerplus.fbreader.plugin.tts" android:versionCode="102000" android:versionName="1.2" android:installLocation="auto">
-	<uses-sdk android:minSdkVersion="4" android:maxSdkVersion="10"/>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="net.clintarmstrong.fbreader.plugin.ospritz" android:versionName="0.9" android:installLocation="auto">
+	<uses-sdk android:minSdkVersion="19" android:maxSdkVersion="19"/>
 	<supports-screens android:smallScreens="true" android:normalScreens="true" android:largeScreens="true" android:anyDensity="true" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 	<application android:label="@string/title" android:icon="@drawable/fbreader_plugin">
-		<receiver android:name=".PluginInfo">
+		<receiver android:name="net.clintarmstrong.fbreader.plugin.ospritz.PluginInfo">
 			<intent-filter>
 				<action android:name="android.fbreader.action.plugin.REGISTER" />
 				<category android:name="android.intent.category.DEFAULT" />
 				<category android:name="android.intent.category.INFO" />
 			</intent-filter>
 		</receiver>
-		<activity android:name=".SpeakActivity" android:configChanges="orientation|keyboardHidden" android:theme="@android:style/Theme.Dialog">
+		<activity android:name=".SpritzActivity" android:configChanges="orientation|keyboardHidden" android:theme="@android:style/Theme.Dialog">
 			<intent-filter>
 				<action android:name="android.fbreader.action.plugin.RUN" />
 				<category android:name="android.intent.category.DEFAULT" />
-				<data android:host="data.fbreader.org" android:scheme="http" android:path="/plugin/tts/speak" />
+				<data android:host="data.fbreader.org" android:scheme="http" android:path="/plugin/ospritz" />
 			</intent-filter>
 		</activity>
 	</application>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- From: file:/Users/andrewgiang/AndroidStudio/git/TextSpritzertest/lib/src/main/res/values/colors.xml -->
+    <eat-comment />
+
+    <color name="pivot_text">#fff7000e</color>
+    <!-- From: file:/Users/andrewgiang/AndroidStudio/git/TextSpritzertest/lib/src/main/res/values/attrs.xml -->
+    <eat-comment />
+
+    <declare-styleable name="SpritzerTextView">
+        <attr name="clickControls" format="boolean" />
+    </declare-styleable>
+    <!-- From: file:/Users/andrewgiang/AndroidStudio/git/TextSpritzertest/lib/src/main/res/values/strings.xml -->
+    <eat-comment />
+
+    <string name="app_name">TextSpritzer</string>
+    <!-- From: file:/Users/andrewgiang/AndroidStudio/git/TextSpritzertest/lib/src/main/res/values/styles.xml -->
+    <eat-comment />
+
+    <style name="PivotLetter">
+        <item name="android:textColor">@color/pivot_text</item>
+    </style>
+
+</resources>
