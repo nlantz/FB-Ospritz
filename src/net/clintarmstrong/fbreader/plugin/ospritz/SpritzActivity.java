@@ -23,7 +23,6 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.PowerManager;
-import android.os.SystemClock;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.WindowManager;
@@ -112,20 +111,6 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
                 setActive(true);
                 mSpritzerTextView.setSpritzText(gotoNextParagraph());
                 mSpritzerTextView.play();
-                new Thread(new Runnable() {
-                    public void run() {
-                        while (myIsActive) {
-                            if (!mSpritzer.isPlaying()) {
-                                if (myParagraphIndex < myParagraphsNumber) {
-                                    ++myParagraphIndex;
-                                    mSpritzerTextView.setSpritzText(gotoNextParagraph());
-                                    mSpritzerTextView.play();
-                                    SystemClock.sleep(500);
-                                }
-                            }
-                        }
-                    }
-                }).start();
             }
 
 
@@ -147,6 +132,19 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
 
         myApi = new ApiClientImplementation(this, this);
         setTitle(R.string.initializing);
+
+        mSpritzerTextView.setOnCompletionListener(new Spritzer.OnCompletionListener() {
+            @Override
+            public void onComplete() {
+                if(myIsActive){
+                    if (myParagraphIndex < myParagraphsNumber) {
+                        ++myParagraphIndex;
+                        mSpritzerTextView.setSpritzText(gotoNextParagraph());
+                        mSpritzerTextView.play();
+                    }
+                }
+            }
+        });
     }
 
     private void setupSeekBars() {

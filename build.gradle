@@ -16,7 +16,7 @@ allprojects {
 
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
-    compile 'com.andrewgiang.spritzertextview:library:0.2.0+'
+    compile 'com.andrewgiang.spritzertextview:library:0.3.31+'
 }
 
 android {
