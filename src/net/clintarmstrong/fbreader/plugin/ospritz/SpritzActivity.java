@@ -227,6 +227,7 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
             showErrorMessage(getText(R.string.initialization_error), true);
             e.printStackTrace();
         }
+        mSpritzerTextView.setSpritzText(gotoNextParagraph());
     }
 
     private void gotoPreviousParagraph() {

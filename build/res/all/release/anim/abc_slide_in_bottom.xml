@@ -17,4 +17,4 @@
            android:interpolator="@android:anim/decelerate_interpolator"
            android:fromYDelta="50%p" android:toYDelta="0"
            android:duration="@android:integer/config_mediumAnimTime"/>
-<!-- From: file:/Volumes/Android/int/klp-dev/frameworks/support/v7/appcompat/res/anim/abc_slide_in_bottom.xml --><!-- From: file:/D:/carmstrong/development/workspace_eclipse/FB-OSpritz/build/exploded-aar/com.android.support/appcompat-v7/19.0.1/res/anim/abc_slide_in_bottom.xml -->
+<!-- From: file:/Volumes/Android/int/klp-dev/frameworks/support/v7/appcompat/res/anim/abc_slide_in_bottom.xml --><!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/build/exploded-aar/com.android.support/appcompat-v7/19.0.1/res/anim/abc_slide_in_bottom.xml -->

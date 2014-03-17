@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- From: file:/D:/carmstrong/development/workspace_eclipse/FB-OSpritz/build/exploded-aar/com.android.support/appcompat-v7/19.0.1/res/values/values.xml -->
+    <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/build/exploded-aar/com.android.support/appcompat-v7/19.0.1/res/values/values.xml -->
     <eat-comment />
 
     <attr name="actionBarDivider" format="reference" />
@@ -78,11 +78,11 @@
     <color name="abc_search_url_text_normal">#7fa87f</color>
     <color name="abc_search_url_text_pressed">@android:color/black</color>
     <color name="abc_search_url_text_selected">@android:color/black</color>
-    <!-- From: file:/D:/carmstrong/development/workspace_eclipse/FB-OSpritz/build/exploded-aar/com.andrewgiang.spritzertextview/library/0.2.0/res/values/values.xml -->
+    <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/build/exploded-aar/com.andrewgiang.spritzertextview/library/0.3.31/res/values/values.xml -->
     <eat-comment />
 
     <color name="pivot_text">#fff7000e</color>
-    <!-- From: file:/D:/carmstrong/development/workspace_eclipse/FB-OSpritz/build/exploded-aar/com.android.support/appcompat-v7/19.0.1/res/values/values.xml -->
+    <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/build/exploded-aar/com.android.support/appcompat-v7/19.0.1/res/values/values.xml -->
     <eat-comment />
 
     <declare-styleable name="ActionBar">
@@ -430,13 +430,13 @@
         -->
         <attr name="disableChildrenWhenDisabled" format="boolean" />
     </declare-styleable>
-    <!-- From: file:/D:/carmstrong/development/workspace_eclipse/FB-OSpritz/build/exploded-aar/com.andrewgiang.spritzertextview/library/0.2.0/res/values/values.xml -->
+    <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/build/exploded-aar/com.andrewgiang.spritzertextview/library/0.3.31/res/values/values.xml -->
     <eat-comment />
 
     <declare-styleable name="SpritzerTextView">
         <attr name="clickControls" format="boolean" />
     </declare-styleable>
-    <!-- From: file:/D:/carmstrong/development/workspace_eclipse/FB-OSpritz/build/exploded-aar/com.android.support/appcompat-v7/19.0.1/res/values/values.xml -->
+    <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/build/exploded-aar/com.android.support/appcompat-v7/19.0.1/res/values/values.xml -->
     <eat-comment />
 
     <declare-styleable name="Theme">
@@ -520,11 +520,11 @@
     <string name="abc_searchview_description_voice">Voice search</string>
     <string name="abc_shareactionprovider_share_with">Share with</string>
     <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
-    <!-- From: file:/D:/carmstrong/development/workspace_eclipse/FB-OSpritz/build/exploded-aar/com.andrewgiang.spritzertextview/library/0.2.0/res/values/values.xml -->
+    <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/build/exploded-aar/com.andrewgiang.spritzertextview/library/0.3.31/res/values/values.xml -->
     <eat-comment />
 
     <string name="app_name">TextSpritzer</string>
-    <!-- From: file:/D:/carmstrong/development/workspace_eclipse/FB-OSpritz/res/values/strings.xml -->
+    <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/res/values/strings.xml -->
     <eat-comment />
 
     <string name="failure">Initialization failed, sorry</string>
@@ -537,13 +537,13 @@
     <string name="seek_text_size">Text Size:</string>
     <string name="seek_wpm">WPM:</string>
     <string name="title">OpenSpritz Plugin</string>
-    <!-- From: file:/D:/carmstrong/development/workspace_eclipse/FB-OSpritz/build/exploded-aar/com.andrewgiang.spritzertextview/library/0.2.0/res/values/values.xml -->
+    <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/build/exploded-aar/com.andrewgiang.spritzertextview/library/0.3.31/res/values/values.xml -->
     <eat-comment />
 
     <style name="PivotLetter">
         <item name="android:textColor">@color/pivot_text</item>
     </style>
-    <!-- From: file:/D:/carmstrong/development/workspace_eclipse/FB-OSpritz/build/exploded-aar/com.android.support/appcompat-v7/19.0.1/res/values/values.xml -->
+    <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/build/exploded-aar/com.android.support/appcompat-v7/19.0.1/res/values/values.xml -->
     <eat-comment />
 
     <style name="TextAppearance.AppCompat.Base.CompactMenu.Dialog" parent="android:TextAppearance.Medium">
