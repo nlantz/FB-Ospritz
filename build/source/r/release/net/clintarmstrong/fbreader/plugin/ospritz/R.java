@@ -900,6 +900,7 @@ containing a value of this type.
         public static final int icon=0x7f07002a;
         public static final int ifRoom=0x7f07000e;
         public static final int image=0x7f070027;
+        public static final int lightdark=0x7f070046;
         public static final int listMode=0x7f070001;
         public static final int list_item=0x7f070029;
         public static final int middle=0x7f07000b;

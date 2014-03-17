@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.SeekBar;
 import android.telephony.PhoneStateListener;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +52,10 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
     private boolean myIsActive = false;
     private ApiClientImplementation myApi;
     private volatile PowerManager.WakeLock myWakeLock;
+    private int mThemeId = -1;
+    private int AndroidVersion = android.os.Build.VERSION.SDK_INT;
+    private boolean lightThemeBool;
+
 
     private void setListener(int id, View.OnClickListener listener) {
         findViewById(id).setOnClickListener(listener);
@@ -59,12 +64,20 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        myPreferences = getSharedPreferences("FBReaderOSpritz", MODE_PRIVATE);
+
+        setThemeType();
+
         setContentView(R.layout.control_panel);
+
+        if (AndroidVersion >= 14) {
+            Switch themeButton = (Switch) findViewById(R.id.light_dark);
+            themeButton.setChecked(lightThemeBool);
+        }
 
         wpmTV = (TextView) findViewById(R.id.wpm_text);
         TextSizeTV = (TextView) findViewById(R.id.text_size_text);
-
-        myPreferences = getSharedPreferences("FBReaderOSpritz", MODE_PRIVATE);
 
         mSpritzerTextView = (SpritzerTextView) findViewById(R.id.spritzTV);
         mSpritzer = mSpritzerTextView.getSpritzer();
@@ -145,6 +158,17 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
                 }
             }
         });
+    }
+
+    private void setThemeType() {
+        switch (myPreferences.getInt("mTheme", 0)) {
+            case 1: this.setTheme(R.style.LightTheme);
+                lightThemeBool = true;
+                break;
+            case 2: this.setTheme(R.style.DarkTheme);
+                lightThemeBool = false;
+                break;
+        }
     }
 
     private void setupSeekBars() {
@@ -362,5 +386,21 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         stopSpritzing();
         switchOff();
         super.onDestroy();
+    }
+
+    public void onLightDarkClicked(View view) {
+
+        if (((Switch) view).isChecked()) {
+            myEditor = myPreferences.edit();
+            myEditor.putInt("mTheme", 1);
+            myEditor.commit();
+
+        } else {
+            myEditor = myPreferences.edit();
+            myEditor.putInt("mTheme", 2);
+            myEditor.commit();
+        }
+
+        this.recreate();
     }
 }

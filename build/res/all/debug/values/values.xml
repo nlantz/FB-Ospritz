@@ -537,6 +537,12 @@
     <string name="seek_text_size">Text Size:</string>
     <string name="seek_wpm">WPM:</string>
     <string name="title">OpenSpritz Plugin</string>
+    <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/res/values/styles.xml -->
+    <eat-comment />
+
+    <style name="DarkTheme" parent="android:Theme.Holo.Dialog"></style>
+
+    <style name="LightTheme" parent="android:Theme.Holo.Light.Dialog"></style>
     <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/build/exploded-aar/com.andrewgiang.spritzertextview/library/0.3.31/res/values/values.xml -->
     <eat-comment />
 
