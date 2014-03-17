@@ -88,13 +88,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/seekBarTextSize" />
-            <ToggleButton
-                android:id="@+id/lightdark"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textOn="Light"
-                android:textOff="Dark"
-                android:onClick="onLightDarkClicked"/>
+            <include layout="@layout/light_dark" />
         </LinearLayout>
     </RelativeLayout >
 </LinearLayout>
