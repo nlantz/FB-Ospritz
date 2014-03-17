@@ -30,4 +30,4 @@
                android:scaleType="fitCenter"
                android:src="?attr/actionModeCloseDrawable"/>
 </LinearLayout>
-<!-- From: file:/Volumes/Android/int/klp-dev/frameworks/support/v7/appcompat/res/layout/abc_action_mode_close_item.xml --><!-- From: file:/D:/carmstrong/development/workspace_eclipse/FB-OSpritz/build/exploded-aar/com.android.support/appcompat-v7/19.0.1/res/layout/abc_action_mode_close_item.xml -->
+<!-- From: file:/Volumes/Android/int/klp-dev/frameworks/support/v7/appcompat/res/layout/abc_action_mode_close_item.xml --><!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/build/exploded-aar/com.android.support/appcompat-v7/19.0.1/res/layout/abc_action_mode_close_item.xml -->

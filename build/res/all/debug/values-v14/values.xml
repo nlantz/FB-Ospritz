@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- From: file:/D:/carmstrong/development/workspace_eclipse/FB-OSpritz/build/exploded-aar/com.android.support/appcompat-v7/19.0.1/res/values-v14/values.xml -->
+    <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/build/exploded-aar/com.android.support/appcompat-v7/19.0.1/res/values-v14/values.xml -->
     <eat-comment />
 
     <style name="TextAppearance.AppCompat.Base.SearchResult.Subtitle" parent="@android:TextAppearance.Holo.SearchResult.Subtitle" />
