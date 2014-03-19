@@ -50,11 +50,12 @@
         tools:context="net.clintarmstrong.fbreader.plugin.ospritz.SpritzActivity">
         <com.andrewgiang.textspritzer.lib.SpritzerTextView
             android:id="@+id/spritzTV"
-            android:layout_width="match_parent"
+            android:ems="13"
             android:layout_height="wrap_content"
             android:typeface="monospace"
             app:clickControls="true"
-        />
+            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"/>
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
@@ -74,7 +75,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/seekBarWpm"
-                android:max="200"
+                android:max="1000"
                 android:indeterminate="false" />
 
             <TextView
@@ -87,8 +88,15 @@
             <SeekBar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/seekBarTextSize" />
-            <include layout="@layout/light_dark" />
+                android:id="@+id/seekBarTextSize"
+                android:max="50"/>
+        <!--    <Spinner
+                android:id="@+id/light_dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/themes_array"
+                android:prompt="@string/themes_prompt"
+                /> !-->
         </LinearLayout>
     </RelativeLayout >
 </LinearLayout>

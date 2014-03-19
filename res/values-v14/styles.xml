@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="LightTheme" parent="android:Theme.DeviceDefault.Light.Dialog">
+    </style>
+
+    <style name="DarkTheme" parent="android:Theme.DeviceDefault.Dialog">
+    </style>
+
+    <style name="BlackTheme" parent="android:Theme.DeviceDefault.Dialog">
+        <item name="android:background">@android:color/black</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+</resources>

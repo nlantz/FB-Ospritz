@@ -6160,16 +6160,16 @@ true
                     msgid="3588849162933574182" >"Več možnosti"
                 </string>
                 <string
-                    name="abc_action_mode_done"
-                    msgid="4076576682505996667" >"Končano"
+                    name="abc_shareactionprovider_share_with"
+                    msgid="3421042268587513524" >"Deljenje z"
                 </string>
                 <string
                     name="abc_activity_chooser_view_see_all"
                     msgid="7468859129482906941" >"Pokaži vse"
                 </string>
                 <string
-                    name="abc_shareactionprovider_share_with"
-                    msgid="3421042268587513524" >"Deljenje z"
+                    name="abc_action_mode_done"
+                    msgid="4076576682505996667" >"Končano"
                 </string>
                 <string
                     name="abc_action_bar_home_description"
@@ -6188,12 +6188,12 @@ true
                     msgid="8264924765203268293" >"Iskanje"
                 </string>
                 <string
-                    name="abc_searchview_description_query"
-                    msgid="2550479030709304392" >"Iskalna poizvedba"
-                </string>
-                <string
                     name="abc_searchview_description_submit"
                     msgid="8928215447528550784" >"Pošiljanje poizvedbe"
+                </string>
+                <string
+                    name="abc_searchview_description_query"
+                    msgid="2550479030709304392" >"Iskalna poizvedba"
                 </string>
                 <string
                     name="abc_searchview_description_voice"
@@ -7532,6 +7532,22 @@ false
                     name="no_data_for_language"
                     formatted="false" >Text-to-speech data for %0 are not installed. Trying to read book in %1.
                 </string>
+                <string name="themes_prompt" >Choose a theme
+                </string>
+
+                <string-array name="themes_array" >
+                    <item>
+Light
+                    </item>
+                    <item>
+Dark
+                    </item>
+                    <item>
+Black
+                    </item>
+                    <!-- <item name="fbreader">FBReader</item>  Todo, get style from fbreader ! -->
+                </string-array>
+
                 <string name="ospritz_menu_item" >Open Spritz
                 </string>
             </file>
@@ -7541,23 +7557,91 @@ false
 
                 <style
                     name="DarkTheme"
+                    parent="android:Theme.Dialog" >
+                </style>
+
+                <style
+                    name="BlackTheme"
+                    parent="android:Theme.Dialog" >
+                    <item name="android:background">
+@android:color/black
+                    </item>
+                    <item name="android:textColor">
+@android:color/white
+                    </item>
+                </style>
+
+                <style
+                    name="LightTheme"
+                    parent="android:Theme.Light.NoTitleBar" >
+                    <item name="android:windowFullscreen">
+false
+                    </item>
+                    <item name="android:windowAnimationStyle">
+@null
+                    </item>
+                    <item name="android:layout_width">
+wrap_content
+                    </item>
+                    <item name="android:layout_height">
+wrap_content
+                    </item>
+                </style>
+            </file>
+            <file
+                path="D:\carmstrong\development\workspace\FB-Ospritz\res\values-v11\styles.xml"
+                qualifiers="v11" >
+
+                <style
+                    name="BlackTheme"
                     parent="android:Theme.Holo.Dialog" >
+                    <item name="android:background">
+@android:color/black
+                    </item>
+                    <item name="android:textColor">
+@android:color/white
+                    </item>
                 </style>
 
                 <style
                     name="LightTheme"
                     parent="android:Theme.Holo.Light.Dialog" >
                 </style>
+
+                <style
+                    name="DarkTheme"
+                    parent="android:Theme.Holo.Dialog" >
+                </style>
             </file>
             <file
-                name="light_dark"
-                path="D:\carmstrong\development\workspace\FB-Ospritz\res\layout\light_dark.xml"
-                qualifiers=""
-                type="layout" />
+                path="D:\carmstrong\development\workspace\FB-Ospritz\res\values-v14\styles.xml"
+                qualifiers="v14" >
+
+                <style
+                    name="BlackTheme"
+                    parent="android:Theme.DeviceDefault.Dialog" >
+                    <item name="android:background">
+@android:color/black
+                    </item>
+                    <item name="android:textColor">
+@android:color/white
+                    </item>
+                </style>
+
+                <style
+                    name="DarkTheme"
+                    parent="android:Theme.DeviceDefault.Dialog" >
+                </style>
+
+                <style
+                    name="LightTheme"
+                    parent="android:Theme.DeviceDefault.Light.Dialog" >
+                </style>
+            </file>
             <file
-                name="light_dark"
-                path="D:\carmstrong\development\workspace\FB-Ospritz\res\layout-v14\light_dark.xml"
-                qualifiers="v14"
+                name="control_panel"
+                path="D:\carmstrong\development\workspace\FB-Ospritz\res\layout-v11\control_panel.xml"
+                qualifiers="v11"
                 type="layout" />
         </source>
         <source path="D:\carmstrong\development\workspace\FB-Ospritz\build\res\rs\debug" />

@@ -21,14 +21,19 @@ package net.clintarmstrong.fbreader.plugin.ospritz;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.telephony.TelephonyManager;
+import android.text.TextPaint;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.telephony.PhoneStateListener;
-import android.widget.Switch;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,9 +57,8 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
     private boolean myIsActive = false;
     private ApiClientImplementation myApi;
     private volatile PowerManager.WakeLock myWakeLock;
-    private int mThemeId = -1;
     private int AndroidVersion = android.os.Build.VERSION.SDK_INT;
-    private boolean lightThemeBool;
+    private Spinner light_dark;
 
 
     private void setListener(int id, View.OnClickListener listener) {
@@ -67,14 +71,42 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
 
         myPreferences = getSharedPreferences("FBReaderOSpritz", MODE_PRIVATE);
 
-        setThemeType();
+        // catch and remove invalid preferences
+        try {
+            if (myPreferences.getInt("mTheme", 1) == 0) {
+                this.setTheme(R.style.LightTheme);
+            } else if (myPreferences.getInt("mTheme", 1) == 1) {
+                this.setTheme(R.style.DarkTheme);
+            } else if (myPreferences.getInt("mTheme", 1) == 2) {
+                this.setTheme(R.style.BlackTheme);
+            }
+        } catch (ClassCastException E) {
+            myEditor = myPreferences.edit();
+            myEditor.remove("mTheme");
+            myEditor.commit();
+        }
+
 
         setContentView(R.layout.control_panel);
 
-        if (AndroidVersion >= 14) {
-            Switch themeButton = (Switch) findViewById(R.id.light_dark);
-            themeButton.setChecked(lightThemeBool);
-        }
+        // Setup light_dark spinner
+        light_dark = (Spinner) findViewById(R.id.light_dark);
+        light_dark.setSelection(myPreferences.getInt("mTheme", 1));
+        light_dark.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int pos, long id) {
+                if (pos!=myPreferences.getInt("mTheme", -1)) {
+                    setPrefInt("mTheme", pos);
+                    reloadview();
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // TODO Auto-generated method stub
+            }
+        });
 
         wpmTV = (TextView) findViewById(R.id.wpm_text);
         TextSizeTV = (TextView) findViewById(R.id.text_size_text);
@@ -85,13 +117,13 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         mSeekBarWpm = (SeekBar) findViewById(R.id.seekBarWpm);
 
         setupSeekBars();
-        // mSeekBarWpm.setProgress(mSpritzerTextView.getWpm());
+
         mSeekBarWpm.setProgress(myPreferences.getInt("mSeekBarWpm", 250));
         wpmTV.setText(getText(R.string.seek_wpm) + " " + myPreferences.getInt("mSeekBarWpm", 250));
 
-                // mSeekBarTextSize.setProgress((int) mSpritzerTextView.getTextSize());
         mSeekBarTextSize.setProgress(myPreferences.getInt("mSeekBarTextSize", (int) mSpritzerTextView.getTextSize()));
         TextSizeTV.setText(getText(R.string.seek_text_size) + " " + myPreferences.getInt("mSeekBarTextSize", (int) mSpritzerTextView.getTextSize()));
+
 
         setListener(R.id.button_previous_paragraph, new View.OnClickListener() {
             public void onClick(View v) {
@@ -160,23 +192,8 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         });
     }
 
-    private void setThemeType() {
-        switch (myPreferences.getInt("mTheme", 0)) {
-            case 1: this.setTheme(R.style.LightTheme);
-                lightThemeBool = true;
-                break;
-            case 2: this.setTheme(R.style.DarkTheme);
-                lightThemeBool = false;
-                break;
-        }
-    }
-
     private void setupSeekBars() {
         if (mSeekBarWpm != null && mSeekBarTextSize != null) {
-            // mSeekBarWpm.setMax(mSpritzerTextView.getWpm() * 2);
-            mSeekBarWpm.setMax(1000);
-
-            mSeekBarTextSize.setMax((int) mSpritzerTextView.getTextSize() * 2);
             mSeekBarWpm.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -184,9 +201,7 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
                         mSpritzerTextView.setWpm(progress);
                         wpmTV.setText(getText(R.string.seek_wpm) + " " + progress);
                         // getText(R.string.initialization_error)
-                        myEditor = myPreferences.edit();
-                        myEditor.putInt("mSeekBarWpm", progress);
-                        myEditor.commit();
+                        setPrefInt("mSeekBarWpm", progress);
                     }
                 }
 
@@ -203,9 +218,7 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     mSpritzerTextView.setTextSize(progress);
                     TextSizeTV.setText(getText(R.string.seek_text_size) + " " + myPreferences.getInt("mSeekBarTextSize", (int) mSpritzerTextView.getTextSize()));
-                    myEditor = myPreferences.edit();
-                    myEditor.putInt("mSeekBarTextSize", progress);
-                    myEditor.commit();
+                    setPrefInt("mSeekBarTextSize", progress);
                 }
 
                 @Override
@@ -214,18 +227,15 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
 
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {
-
                 }
             });
         }
     }
 
-    // implements ApiClientImplementation.ConnectionListener
 
     private volatile int myInitializationStatus;
     private static int API_INITIALIZED = 1;
-    // private static int TTS_INITIALIZED = 2;
-    private static int FULLY_INITIALIZED = API_INITIALIZED; // | TTS_INITIALIZED;
+    private static int FULLY_INITIALIZED = API_INITIALIZED;
 
     public void onConnected() {
         if (myInitializationStatus != FULLY_INITIALIZED) {
@@ -237,7 +247,6 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
     }
 
     private void onInitializationCompleted() {
-        final SpritzerTextView view = (SpritzerTextView) findViewById(R.id.spritzTV);
         try {
             setTitle(myApi.getBookTitle());
 
@@ -245,13 +254,18 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
             myParagraphsNumber = myApi.getParagraphsNumber();
             setActionsEnabled(true);
             setActive(false);
-            // mSpritzerTextView.setSpritzText(gotoNextParagraph());
         } catch (ApiException e) {
             setActionsEnabled(false);
             showErrorMessage(getText(R.string.initialization_error), true);
             e.printStackTrace();
         }
         mSpritzerTextView.setSpritzText(gotoNextParagraph());
+    }
+
+    private void setPrefInt(String key, int mInt){
+        myEditor = myPreferences.edit();
+        myEditor.putInt(key, mInt);
+        myEditor.commit();
     }
 
     private void gotoPreviousParagraph() {
@@ -381,26 +395,19 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         }
     }
 
+    private void reloadview() {
+        if (AndroidVersion > 14){
+            this.recreate();
+        } else {
+            finish();
+            startActivity(getIntent());
+        }
+    }
+
     @Override
     protected void onDestroy() {
         stopSpritzing();
         switchOff();
         super.onDestroy();
-    }
-
-    public void onLightDarkClicked(View view) {
-
-        if (((Switch) view).isChecked()) {
-            myEditor = myPreferences.edit();
-            myEditor.putInt("mTheme", 1);
-            myEditor.commit();
-
-        } else {
-            myEditor = myPreferences.edit();
-            myEditor.putInt("mTheme", 2);
-            myEditor.commit();
-        }
-
-        this.recreate();
     }
 }
