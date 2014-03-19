@@ -25,6 +25,7 @@ import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.text.TextPaint;
 import android.util.Log;
@@ -70,21 +71,11 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         super.onCreate(savedInstanceState);
 
         myPreferences = getSharedPreferences("FBReaderOSpritz", MODE_PRIVATE);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
-        // catch and remove invalid preferences
-        try {
-            if (myPreferences.getInt("mTheme", 1) == 0) {
-                this.setTheme(R.style.LightTheme);
-            } else if (myPreferences.getInt("mTheme", 1) == 1) {
-                this.setTheme(R.style.DarkTheme);
-            } else if (myPreferences.getInt("mTheme", 1) == 2) {
-                this.setTheme(R.style.BlackTheme);
-            }
-        } catch (ClassCastException E) {
-            myEditor = myPreferences.edit();
-            myEditor.remove("mTheme");
-            myEditor.commit();
-        }
+        int theme_style = getResources().getIdentifier(sharedPref.getString("theme_style", ""), "style", getPackageName());
+        this.setTheme(theme_style);
+
 
         setContentView(R.layout.control_panel);
 
