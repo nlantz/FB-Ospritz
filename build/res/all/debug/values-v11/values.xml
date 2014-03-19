@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/res/values-v11/styles.xml -->
-    <eat-comment />
-
-    <style name="BlackTheme" parent="android:Theme.Holo.Dialog">
-        <item name="android:background">@android:color/black</item>
-        <item name="android:textColor">@android:color/white</item>
-    </style>
-
-    <style name="DarkTheme" parent="android:Theme.Holo.Dialog"></style>
-
-    <style name="LightTheme" parent="android:Theme.Holo.Light.Dialog"></style>
     <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/build/exploded-aar/com.android.support/appcompat-v7/19.0.1/res/values-v11/values.xml -->
     <eat-comment />
 

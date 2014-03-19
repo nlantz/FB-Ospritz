@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="net.clintarmstrong.fbreader.plugin.ospritz" android:versionName="1.2" android:versionCode="8" android:installLocation="auto">
-	<uses-sdk android:targetSdkVersion="19" android:minSdkVersion="10"/>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="net.clintarmstrong.fbreader.plugin.ospritz" android:versionName="1.2.2" android:versionCode="10" android:installLocation="auto">
+	<uses-sdk android:targetSdkVersion="19" android:minSdkVersion="11"/>
 	<supports-screens android:smallScreens="true" android:normalScreens="true" android:largeScreens="true" android:anyDensity="true" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
