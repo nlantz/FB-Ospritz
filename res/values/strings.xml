@@ -11,6 +11,12 @@
     <string name="seek_text_size">Text Size:</string>
     <string name="seek_wpm">WPM:</string>
     <string name="themes_prompt">Choose a theme</string>
+    <string name="pref_theme_title">Theme</string>
+    <string name="pref_theme_section_title">Themes Settings</string>
+    <string name="theme_style_dialog_title">Choose a Theme</string>
+    <string name="pref_theme_default">DarkTheme</string>
+    <string name="custom_theme_section">Custom Theme</string>
+    <string name="action_settings">Settings</string>
     <!-- The order of these should not be changed, or will break existing preferences !-->
     <string-array name="themes_array">
         <item>Light</item>

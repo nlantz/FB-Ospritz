@@ -20,6 +20,7 @@
 package net.clintarmstrong.fbreader.plugin.ospritz;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.telephony.PhoneStateListener;
 import android.widget.Spinner;
@@ -57,7 +59,6 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
     private ApiClientImplementation myApi;
     private volatile PowerManager.WakeLock myWakeLock;
     private int AndroidVersion = android.os.Build.VERSION.SDK_INT;
-    private Spinner light_dark;
 
 
     private void setListener(int id, View.OnClickListener listener) {
@@ -85,27 +86,7 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
             myEditor.commit();
         }
 
-
         setContentView(R.layout.control_panel);
-
-        // Setup light_dark spinner
-        light_dark = (Spinner) findViewById(R.id.light_dark);
-        light_dark.setSelection(myPreferences.getInt("mTheme", 1));
-        light_dark.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int pos, long id) {
-                if (pos!=myPreferences.getInt("mTheme", -1)) {
-                    setPrefInt("mTheme", pos);
-                    reloadview();
-                }
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // TODO Auto-generated method stub
-            }
-        });
 
         wpmTV = (TextView) findViewById(R.id.wpm_text);
         TextSizeTV = (TextView) findViewById(R.id.text_size_text);
@@ -408,5 +389,10 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         stopSpritzing();
         switchOff();
         super.onDestroy();
+    }
+
+    public void launchSettings(View view) {
+        Intent settingsIntent = new Intent(this, SettingsActivity.class);
+        startActivity(settingsIntent);
     }
 }

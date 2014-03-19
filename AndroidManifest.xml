@@ -19,5 +19,6 @@
 				<data android:host="data.fbreader.org" android:scheme="http" android:path="/plugin/ospritz" />
 			</intent-filter>
 		</activity>
+        <activity android:name=".SettingsActivity"></activity>
 	</application>
 </manifest>

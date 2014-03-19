@@ -5,43 +5,9 @@
 	android:layout_height="wrap_content"
 	android:orientation="vertical"
 >
-	<LinearLayout
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:orientation="horizontal"
-		android:weightSum="4"
-	>
-		<ImageButton android:id="@+id/button_previous_paragraph"
-			android:layout_width="70dip"
-			android:layout_height="50dip"
-			android:layout_weight="1"
-			android:src="@drawable/media_skip_backward"
-		/> 
-		<ImageButton android:id="@+id/button_play"
-			android:layout_width="70dip"
-			android:layout_height="50dip"
-			android:layout_weight="1"
-			android:src="@drawable/media_playback_start"
-		/>
-		<ImageButton android:id="@+id/button_pause"
-			android:layout_width="70dip"
-			android:layout_height="50dip"
-			android:layout_weight="1"
-			android:src="@drawable/media_playback_pause"
-		/>
-		<ImageButton android:id="@+id/button_next_paragraph"
-			android:layout_width="70dip"
-			android:layout_height="50dip"
-			android:layout_weight="1"
-			android:src="@drawable/media_skip_forward"
-		/>
-		<ImageButton android:id="@+id/button_close"
-			android:layout_width="70dip"
-			android:layout_height="50dip"
-			android:layout_weight="1"
-			android:src="@drawable/media_playback_stop"
-		/>
-	</LinearLayout>
+
+
+
     <RelativeLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -64,9 +30,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/spritzTV"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="45dp">
+            android:layout_marginTop="45dp"
+            android:id="@+id/linearLayout">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -85,21 +50,64 @@
                 android:layout_height="wrap_content"
                 android:text="@string/seek_text_size"
                 android:id="@+id/text_size_text"
-                android:layout_marginTop="43dp" />
+                 />
 
             <SeekBar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/seekBarTextSize"
                 android:max="50"/>
-            <Spinner
-                android:id="@+id/light_dark"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:entries="@array/themes_array"
-                android:prompt="@string/themes_prompt"
-                />
         </LinearLayout>
     </RelativeLayout >
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <ImageButton android:id="@+id/button_previous_paragraph"
+            android:layout_width="70dip"
+            android:layout_height="50dip"
+            android:layout_weight="1"
+            android:src="@android:drawable/ic_media_previous"
+            />
+        <ImageButton android:id="@+id/button_close"
+            android:layout_width="70dip"
+            android:layout_height="50dip"
+            android:layout_weight="1"
+            android:src="@drawable/ic_media_stop"
+            />
+        <ImageButton android:id="@+id/button_settings"
+            android:layout_width="70dip"
+            android:layout_height="50dip"
+            android:layout_weight="0"
+            android:src="@android:drawable/ic_menu_preferences"
+            android:onClick="launchSettings"
+            android:layout_alignTop="@+id/linearLayout"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+        <ImageButton android:id="@+id/button_next_paragraph"
+            android:layout_width="70dip"
+            android:layout_height="50dip"
+            android:layout_weight="1"
+            android:src="@android:drawable/ic_media_next"
+            />
+        </LinearLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <ImageButton android:id="@+id/button_play"
+            android:layout_width="70dip"
+            android:layout_height="50dip"
+            android:layout_weight="2"
+            android:src="@android:drawable/ic_media_play"
+            />
+        <ImageButton android:id="@+id/button_pause"
+            android:layout_width="70dip"
+            android:layout_height="50dip"
+            android:layout_weight="2"
+            android:src="@android:drawable/ic_media_pause"
+            android:visibility="gone"
+            />
+    </LinearLayout>
 </LinearLayout>
 <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/res/layout/control_panel.xml -->

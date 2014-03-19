@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/res/values/arrays.xml -->
+    <eat-comment />
+
+    <string-array name="pref_themes">
+        <item>Light</item>
+        <item>Dark</item>
+        <item>Black</item>
+    </string-array>
+    <string-array name="pref_themes_values">
+        <item>LightTheme</item>
+        <item>DarkTheme</item>
+        <item>BlackTheme</item>
+    </string-array>
     <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/res/values/strings.xml -->
     <eat-comment />
 
@@ -529,6 +542,10 @@
     <string name="abc_searchview_description_voice">Voice search</string>
     <string name="abc_shareactionprovider_share_with">Share with</string>
     <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
+    <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/res/values/strings.xml -->
+    <eat-comment />
+
+    <string name="action_settings">Settings</string>
     <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/build/exploded-aar/com.andrewgiang.spritzertextview/library/0.3.31/res/values/values.xml -->
     <eat-comment />
 
@@ -536,6 +553,7 @@
     <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/res/values/strings.xml -->
     <eat-comment />
 
+    <string name="custom_theme_section">Custom Theme</string>
     <string name="failure">Initialization failed, sorry</string>
     <string name="initialization_error">Could not get book data from FBReader.</string>
     <string name="initializing">Initializing…</string>
@@ -543,8 +561,12 @@
     <string name="no_data_for_language" formatted="false">Text-to-speech data for %0 are not installed. Trying to read book in %1.</string>
     <string name="no_tts_installed">Could not connect TTS engine on your device.</string>
     <string name="ospritz_menu_item">Open Spritz</string>
+    <string name="pref_theme_default">DarkTheme</string>
+    <string name="pref_theme_section_title">Themes Settings</string>
+    <string name="pref_theme_title">Theme</string>
     <string name="seek_text_size">Text Size:</string>
     <string name="seek_wpm">WPM:</string>
+    <string name="theme_style_dialog_title">Choose a Theme</string>
     <string name="themes_prompt">Choose a theme</string>
     <string name="title">OpenSpritz Plugin</string>
     <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/res/values/styles.xml -->
@@ -553,11 +575,16 @@
     <style name="BlackTheme" parent="android:Theme.Holo.Dialog">
         <item name="android:background">@android:color/black</item>
         <item name="android:textColor">@android:color/white</item>
+        <item name="android:windowActionModeOverlay">true</item>
     </style>
 
-    <style name="DarkTheme" parent="android:Theme.Holo.Dialog"></style>
+    <style name="DarkTheme" parent="android:Theme.Holo.Dialog">
+        <item name="android:windowActionModeOverlay">true</item>
+    </style>
 
-    <style name="LightTheme" parent="android:Theme.Holo.Light.Dialog"></style>
+    <style name="LightTheme" parent="android:Theme.Holo.Light.Dialog">
+        <item name="android:windowActionModeOverlay">true</item>
+    </style>
     <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/build/exploded-aar/com.andrewgiang.spritzertextview/library/0.3.31/res/values/values.xml -->
     <eat-comment />
 
