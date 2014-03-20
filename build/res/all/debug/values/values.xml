@@ -599,6 +599,10 @@
     <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/res/values/strings.xml -->
     <eat-comment />
 
+    <string name="background_color_title">Background Color</string>
+    <string name="custom_background_color_enabled_title">Custom Background Color</string>
+    <string name="custom_colors_category">Custom Colors</string>
+    <string name="custom_text_color_enabled_title">Custom Text Color</string>
     <string name="custom_theme_section">Custom Theme</string>
     <string name="failure">Initialization failed, sorry</string>
     <string name="initialization_error">Could not get book data from FBReader.</string>
@@ -614,6 +618,8 @@
     <string name="pref_theme_title">Theme</string>
     <string name="seek_text_size">Text Size:</string>
     <string name="seek_wpm">WPM:</string>
+    <string name="text_color_summary">Text Color</string>
+    <string name="text_color_title">Text Color</string>
     <string name="theme_style_dialog_title">Choose a Theme</string>
     <string name="themes_prompt">Choose a theme</string>
     <string name="title">OpenSpritz Plugin</string>

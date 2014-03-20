@@ -12,6 +12,32 @@
             android:entryValues="@array/pref_themes_values"
             android:defaultValue="@string/pref_theme_default"
             android:summary="%s" />
+        <PreferenceScreen
+            android:title="@string/custom_colors_category"
+            android:persistent="false">
+            <CheckBoxPreference
+                android:key="custom_text_color_enabled"
+                android:title="@string/custom_text_color_enabled_title"
+                android:defaultValue="false" />
+            <net.usikkert.kouchat.android.component.HoloColorPickerPreference
+                android:key="custom_text_color"
+                android:title="@string/text_color_title"
+                android:defaultValue="-1"
+                android:dialogTitle="@string/text_color_title"
+                android:dialogIcon="@android:drawable/ic_dialog_info"
+                android:dependency="custom_text_color_enabled"/>
+            <CheckBoxPreference
+                android:key="custom_background_color_enabled"
+                android:title="@string/custom_background_color_enabled_title"
+                android:defaultValue="false" />
+            <net.usikkert.kouchat.android.component.HoloColorPickerPreference
+                android:key="custom_background_color"
+                android:title="@string/background_color_title"
+                android:defaultValue="-16777216"
+                android:dialogTitle="@string/background_color_title"
+                android:dialogIcon="@android:drawable/ic_dialog_info"
+                android:dependency="custom_background_color_enabled"/>
+        </PreferenceScreen>
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/pref_speed_section_title">

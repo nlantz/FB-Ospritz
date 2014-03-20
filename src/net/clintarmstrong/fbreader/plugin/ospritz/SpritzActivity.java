@@ -62,6 +62,8 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
     private volatile PowerManager.WakeLock myWakeLock;
     private int AndroidVersion = android.os.Build.VERSION.SDK_INT;
     private int initialTheme;
+    private boolean initialTextColorEnabled = false;
+    private boolean initialBackgroundColorEnabled = false;
 
 
     private void setListener(int id, View.OnClickListener listener) {
@@ -125,8 +127,20 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
 
     private void setThemeFromPref(){
         int theme_style = getResources().getIdentifier(myPreferences.getString("theme_style", ""), "style", getPackageName());
+        boolean custom_text_color_enabled = myPreferences.getBoolean("custom_text_color_enabled", false);
+        boolean custom_background_color_enabled = myPreferences.getBoolean("custom_background_color_enabled", false);
     //    this.setTheme(theme_style);
-        if (initialTheme != theme_style) {reloadview();}
+
+        if ((initialTheme != theme_style) || (initialTextColorEnabled && !custom_text_color_enabled) || (initialBackgroundColorEnabled && !custom_background_color_enabled))
+            {reloadview();}
+        if (custom_text_color_enabled){
+            mSpritzerTextView.setTextColor(myPreferences.getInt("custom_text_color", -1));
+            initialTextColorEnabled = true;
+        }
+        if (custom_background_color_enabled){
+            mSpritzerTextView.setBackgroundColor(myPreferences.getInt("custom_background_color", -16777216));
+            initialBackgroundColorEnabled = true;
+        }
     }
 
     private void setPhoneInterrupt(){

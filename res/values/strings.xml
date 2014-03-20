@@ -19,6 +19,12 @@
     <string name="action_settings">Settings</string>
     <string name="pref_speed_section_title">Speed Settings</string>
     <string name="pref_text_size_section_title">Text Size Settings</string>
+    <string name="text_color_title">Text Color</string>
+    <string name="text_color_summary">Text Color</string>
+    <string name="background_color_title">Background Color</string>
+    <string name="custom_text_color_enabled_title">Custom Text Color</string>
+    <string name="custom_background_color_enabled_title">Custom Background Color</string>
+    <string name="custom_colors_category">Custom Colors</string>
     <!-- The order of these should not be changed, or will break existing preferences !-->
     <string-array name="themes_array">
         <item>Light</item>
