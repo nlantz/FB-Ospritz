@@ -77,7 +77,7 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         myPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         // store initial theme, so we can tell if it has changed and if we need to reload it later.
-        initialTheme = getResources().getIdentifier(myPreferences.getString("theme_style", ""), "style", getPackageName());
+        initialTheme = getResources().getIdentifier(myPreferences.getString("theme_style", getString(R.string.pref_theme_default)), "style", getPackageName());
         this.setTheme(initialTheme);
 
         setContentView(R.layout.control_panel);
@@ -125,7 +125,7 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
     }
 
     private void setThemeFromPref(){
-        int theme_style = getResources().getIdentifier(myPreferences.getString("theme_style", ""), "style", getPackageName());
+        int theme_style = getResources().getIdentifier(myPreferences.getString("theme_style", getString(R.string.pref_theme_default)), "style", getPackageName());
         boolean custom_text_color_enabled = myPreferences.getBoolean("custom_text_color_enabled", false);
         boolean custom_background_color_enabled = myPreferences.getBoolean("custom_background_color_enabled", false);
     //    this.setTheme(theme_style);

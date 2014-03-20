@@ -14,15 +14,6 @@
         <item>DarkTheme</item>
         <item>BlackTheme</item>
     </string-array>
-    <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/res/values/strings.xml -->
-    <eat-comment />
-
-    <string-array name="themes_array">
-        <item>Light</item>
-        <item>Dark</item>
-        <item>Black</item>
-        <!-- <item name="fbreader">FBReader</item>  Todo, get style from fbreader ! -->
-    </string-array>
     <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/build/exploded-aar/com.android.support/appcompat-v7/19.0.1/res/values/values.xml -->
     <eat-comment />
 

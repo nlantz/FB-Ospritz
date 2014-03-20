@@ -25,11 +25,4 @@
     <string name="custom_text_color_enabled_title">Custom Text Color</string>
     <string name="custom_background_color_enabled_title">Custom Background Color</string>
     <string name="custom_colors_category">Custom Colors</string>
-    <!-- The order of these should not be changed, or will break existing preferences !-->
-    <string-array name="themes_array">
-        <item>Light</item>
-        <item>Dark</item>
-        <item>Black</item>
-        <!-- <item name="fbreader">FBReader</item>  Todo, get style from fbreader !-->
-    </string-array>
 </resources>

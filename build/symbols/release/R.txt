@@ -6,7 +6,6 @@ int anim abc_slide_out_bottom 0x7f040004
 int anim abc_slide_out_top 0x7f040005
 int array pref_themes 0x7f060000
 int array pref_themes_values 0x7f060001
-int array themes_array 0x7f060002
 int attr actionBarDivider 0x7f010000
 int attr actionBarItemBackground 0x7f010001
 int attr actionBarSize 0x7f010002

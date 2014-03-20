@@ -19,9 +19,6 @@ public final class R {
     public static final class array {
         public static final int pref_themes=0x7f060000;
         public static final int pref_themes_values=0x7f060001;
-        /**  <item name="fbreader">FBReader</item>  Todo, get style from fbreader ! 
-         */
-        public static final int themes_array=0x7f060002;
     }
     public static final class attr {
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
