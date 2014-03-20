@@ -96,7 +96,6 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         mSeekBarWpm = (SeekBar) findViewById(R.id.seekBarWpm);
 
         setupButtons();
-        setPhoneInterrupt();
         setSpritzerListener();
 
         myApi = new ApiClientImplementation(this, this);
@@ -143,17 +142,10 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         }
     }
 
-    private void setPhoneInterrupt(){
-        ((TelephonyManager)getSystemService(TELEPHONY_SERVICE)).listen(
-                new PhoneStateListener() {
-                    public void onCallStateChanged(int state, String incomingNumber) {
-                        if (state == TelephonyManager.CALL_STATE_RINGING) {
-                            stopSpritzing();
-                        }
-                    }
-                },
-                PhoneStateListener.LISTEN_CALL_STATE
-        );
+    @Override
+    protected void onPause(){
+        super.onPause();
+        stopSpritzing();
     }
 
     private void setupSeekBars() {
@@ -161,11 +153,10 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         // Setup listener for changes.
         mSeekBarWpm.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int min = myPreferences.getInt("wpm_min", 100);
-            int max = myPreferences.getInt("wpm_max", 1000);
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 // math needed to turn progress from 1 to 100 into a value between min and max
-                int total = (progress * (max - min)/100) + min;
+                int total = progress + min;
                 mSpritzerTextView.setWpm(total);
                 wpmTV.setText(getText(R.string.seek_wpm) + " " + total);
                 setPrefInt("wpm_speed", total);
@@ -183,7 +174,7 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         int wMin = myPreferences.getInt("wpm_min", 100);
         int wMax = myPreferences.getInt("wpm_max", 1000);
         // fix bad values
-        if (wTotal > wMax) {
+        if (wTotal > wMax || wTotal < wMin) {
             removePref("wpm_speed");
             wTotal = myPreferences.getInt("wpm_speed", 250);}
         // fix bad values
@@ -193,23 +184,23 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
             wMax = myPreferences.getInt("wpm_max", 1000);
         }
         // math needed to turn progress from 1 to 100 into a value between min and max
-        int wProgress = (100*(wTotal - wMin) / (wMax - wMin));
+        mSeekBarWpm.setMax(wMax - wMin);
+        int wProgress = (wTotal - wMin);
         mSeekBarWpm.setProgress(wProgress);
         // this shouldn't be needed, setprogress should trigger onProgressChanged
         // wpmTV.setText(getText(R.string.seek_wpm) + " " + wTotal);
 
         // listen for changes to size bar
         mSeekBarTextSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            int min = myPreferences.getInt("text_size_min", 4);
-            int max = myPreferences.getInt("text_size_max", 50);
+            int min = myPreferences.getInt("text_size_min", 4)*10;
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 // math needed to turn progress from 1 to 100 into a value between min and max
                 // total is a float here because font sizes may not be integers
-                float total = (progress * (max - min)/100) + min;
-                mSpritzerTextView.setTextSize(total);
-                TextSizeTV.setText(getText(R.string.seek_text_size) + " " + total);
-                setPrefFloat("text_size", total);
+                int total = progress + min;
+                mSpritzerTextView.setTextSize(total/10);
+                TextSizeTV.setText(getText(R.string.seek_text_size) + " " + (float) total/10);
+                setPrefInt("text_size", total);
             }
 
             @Override
@@ -221,33 +212,36 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
             }
         });
 
-        Float sTotal;
+        int sTotal;
         // catch if pref is stored as int, probably won't happen in prod, but happened to me while developing.
         try {
-            sTotal = myPreferences.getFloat("text_size", 20);
+            sTotal = myPreferences.getInt("text_size", 200);
         } catch (ClassCastException e) {
             removePref("text_size");
-            sTotal = myPreferences.getFloat("text_size", 20);
+            sTotal = myPreferences.getInt("text_size", 200);
         }
 
-
-        int sMin = myPreferences.getInt("text_size_min", 4);
-        int sMax = myPreferences.getInt("text_size_max", 50);
+        int sMin = myPreferences.getInt("text_size_min", 4)*10;
+        int sMax = myPreferences.getInt("text_size_max", 50)*10;
         // fix bad values
-        if (sTotal > sMax) {
+        if (sTotal > sMax || sTotal < sMin) {
+            Toast.makeText(SpritzActivity.this, "smax " + sMax, Toast.LENGTH_SHORT).show();
+            Toast.makeText(SpritzActivity.this, "smin " + sMin, Toast.LENGTH_SHORT).show();
+            Toast.makeText(SpritzActivity.this, "stotal " + sTotal, Toast.LENGTH_SHORT).show();
             removePref("text_size");
-            sTotal = myPreferences.getFloat("text_size", 20);
+            sTotal = myPreferences.getInt("text_size", 200);
         }
         // fix bad values
         if (sMin >= sMax) {
             removePref("text_size_min"); removePref("text_size_max");
-            wMin = myPreferences.getInt("text_size_min", 100);
-            wMax = myPreferences.getInt("text_size_max", 1000);
+            sMin = myPreferences.getInt("text_size_min", 4);
+            sMax = myPreferences.getInt("text_size_max", 50);
         }
-        // math needed to turn progress from 1 to 100 into a value between min and max
-        int sProgress = (100*(sTotal.intValue() - sMin) / (sMax - sMin));
+        // math needed to allow .1 font sizes
+        mSeekBarTextSize.setMax(sMax - sMin);
+        int sProgress = (sTotal - sMin);
         mSeekBarTextSize.setProgress(sProgress);
-        TextSizeTV.setText(getText(R.string.seek_text_size) + " " + sTotal);
+        TextSizeTV.setText(getText(R.string.seek_text_size) + " " + (float) sTotal/10);
     }
 
     private void setupButtons(){

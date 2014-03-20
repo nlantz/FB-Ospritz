@@ -3,7 +3,6 @@
 	<uses-sdk android:targetSdkVersion="19" android:minSdkVersion="11"/>
 	<supports-screens android:smallScreens="true" android:normalScreens="true" android:largeScreens="true" android:anyDensity="true" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-	<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 	<application android:label="@string/title" android:icon="@drawable/fbreader_plugin">
 		<receiver android:name="net.clintarmstrong.fbreader.plugin.ospritz.PluginInfo">
 			<intent-filter>
