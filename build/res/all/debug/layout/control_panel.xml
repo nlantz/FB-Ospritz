@@ -15,6 +15,7 @@
         android:layout_height="match_parent"
         tools:context="net.clintarmstrong.fbreader.plugin.ospritz.SpritzActivity">
         <com.andrewgiang.textspritzer.lib.SpritzerTextView
+            android:layout_marginTop="45dp"
             android:id="@+id/spritzTV"
             android:ems="13"
             android:minEms="13"
@@ -42,7 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/seekBarWpm"
-                android:max="1000"
+                android:max="100"
                 android:indeterminate="false" />
 
             <TextView
@@ -56,7 +57,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/seekBarTextSize"
-                android:max="50"/>
+                android:max="100"/>
         </LinearLayout>
     </RelativeLayout >
     <LinearLayout

@@ -1,5 +1,6 @@
 package net.clintarmstrong.fbreader.plugin.ospritz;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 

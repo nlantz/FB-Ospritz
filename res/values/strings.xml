@@ -17,6 +17,8 @@
     <string name="pref_theme_default">DarkTheme</string>
     <string name="custom_theme_section">Custom Theme</string>
     <string name="action_settings">Settings</string>
+    <string name="pref_speed_section_title">Speed Settings</string>
+    <string name="pref_text_size_section_title">Text Size Settings</string>
     <!-- The order of these should not be changed, or will break existing preferences !-->
     <string-array name="themes_array">
         <item>Light</item>

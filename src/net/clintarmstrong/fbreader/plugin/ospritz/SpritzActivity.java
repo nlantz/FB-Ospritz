@@ -29,6 +29,7 @@ import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.text.TextPaint;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -60,6 +61,7 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
     private ApiClientImplementation myApi;
     private volatile PowerManager.WakeLock myWakeLock;
     private int AndroidVersion = android.os.Build.VERSION.SDK_INT;
+    private int initialTheme;
 
 
     private void setListener(int id, View.OnClickListener listener) {
@@ -72,29 +74,169 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
 
         myPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        int theme_style = getResources().getIdentifier(myPreferences.getString("theme_style", ""), "style", getPackageName());
-        this.setTheme(theme_style);
-
+        // store initial theme, so we can tell if it has changed and if we need to reload it later.
+        initialTheme = getResources().getIdentifier(myPreferences.getString("theme_style", ""), "style", getPackageName());
+        this.setTheme(initialTheme);
 
         setContentView(R.layout.control_panel);
 
+        // put window in initializing status
+        setTitle(R.string.initializing);
+        setActive(false);
+        setActionsEnabled(false);
+
+        // get all of the views we'll need later
         wpmTV = (TextView) findViewById(R.id.wpm_text);
         TextSizeTV = (TextView) findViewById(R.id.text_size_text);
-
         mSpritzerTextView = (SpritzerTextView) findViewById(R.id.spritzTV);
         mSpritzer = mSpritzerTextView.getSpritzer();
         mSeekBarTextSize = (SeekBar) findViewById(R.id.seekBarTextSize);
         mSeekBarWpm = (SeekBar) findViewById(R.id.seekBarWpm);
 
+        setupButtons();
+        setPhoneInterrupt();
+        setSpritzerListener();
+
+        myApi = new ApiClientImplementation(this, this);
+    }
+
+    // onresume is created after oncreate, so no need to run these in oncreate as well.
+    @Override
+    protected void onResume(){
+        super.onResume();
+        setThemeFromPref();
         setupSeekBars();
+    }
 
-        mSeekBarWpm.setProgress(myPreferences.getInt("mSeekBarWpm", 250));
-        wpmTV.setText(getText(R.string.seek_wpm) + " " + myPreferences.getInt("mSeekBarWpm", 250));
+    private void setSpritzerListener(){
+        mSpritzerTextView.setOnCompletionListener(new Spritzer.OnCompletionListener() {
+            @Override
+            public void onComplete() {
+                if(myIsActive){
+                    if (myParagraphIndex < myParagraphsNumber) {
+                        ++myParagraphIndex;
+                        mSpritzerTextView.setSpritzText(gotoNextParagraph());
+                        mSpritzerTextView.play();
+                    }
+                }
+            }
+        });
+    }
 
-        mSeekBarTextSize.setProgress(myPreferences.getInt("mSeekBarTextSize", (int) mSpritzerTextView.getTextSize()));
-        TextSizeTV.setText(getText(R.string.seek_text_size) + " " + myPreferences.getInt("mSeekBarTextSize", (int) mSpritzerTextView.getTextSize()));
+    private void setThemeFromPref(){
+        int theme_style = getResources().getIdentifier(myPreferences.getString("theme_style", ""), "style", getPackageName());
+    //    this.setTheme(theme_style);
+        if (initialTheme != theme_style) {reloadview();}
+    }
+
+    private void setPhoneInterrupt(){
+        ((TelephonyManager)getSystemService(TELEPHONY_SERVICE)).listen(
+                new PhoneStateListener() {
+                    public void onCallStateChanged(int state, String incomingNumber) {
+                        if (state == TelephonyManager.CALL_STATE_RINGING) {
+                            stopSpritzing();
+                        }
+                    }
+                },
+                PhoneStateListener.LISTEN_CALL_STATE
+        );
+    }
+
+    private void setupSeekBars() {
+
+        // Setup listener for changes.
+        mSeekBarWpm.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int min = myPreferences.getInt("wpm_min", 100);
+            int max = myPreferences.getInt("wpm_max", 1000);
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                // math needed to turn progress from 1 to 100 into a value between min and max
+                int total = (progress * (max - min)/100) + min;
+                mSpritzerTextView.setWpm(total);
+                wpmTV.setText(getText(R.string.seek_wpm) + " " + total);
+                setPrefInt("wpm_speed", total);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+        int wTotal = myPreferences.getInt("wpm_speed", 250);
+        int wMin = myPreferences.getInt("wpm_min", 100);
+        int wMax = myPreferences.getInt("wpm_max", 1000);
+        // fix bad values
+        if (wTotal > wMax) {
+            removePref("wpm_speed");
+            wTotal = myPreferences.getInt("wpm_speed", 250);}
+        // fix bad values
+        if (wMin >= wMax) {
+            removePref("wpm_min"); removePref("wpm_max");
+            wMin = myPreferences.getInt("wpm_min", 100);
+            wMax = myPreferences.getInt("wpm_max", 1000);
+        }
+        // math needed to turn progress from 1 to 100 into a value between min and max
+        int wProgress = (100*(wTotal - wMin) / (wMax - wMin));
+        mSeekBarWpm.setProgress(wProgress);
+        // this shouldn't be needed, setprogress should trigger onProgressChanged
+        // wpmTV.setText(getText(R.string.seek_wpm) + " " + wTotal);
+
+        // listen for changes to size bar
+        mSeekBarTextSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int min = myPreferences.getInt("text_size_min", 4);
+            int max = myPreferences.getInt("text_size_max", 50);
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                // math needed to turn progress from 1 to 100 into a value between min and max
+                // total is a float here because font sizes may not be integers
+                float total = (progress * (max - min)/100) + min;
+                mSpritzerTextView.setTextSize(total);
+                TextSizeTV.setText(getText(R.string.seek_text_size) + " " + total);
+                setPrefFloat("text_size", total);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+
+        Float sTotal;
+        // catch if pref is stored as int, probably won't happen in prod, but happened to me while developing.
+        try {
+            sTotal = myPreferences.getFloat("text_size", 20);
+        } catch (ClassCastException e) {
+            removePref("text_size");
+            sTotal = myPreferences.getFloat("text_size", 20);
+        }
 
 
+        int sMin = myPreferences.getInt("text_size_min", 4);
+        int sMax = myPreferences.getInt("text_size_max", 50);
+        // fix bad values
+        if (sTotal > sMax) {
+            removePref("text_size");
+            sTotal = myPreferences.getFloat("text_size", 20);
+        }
+        // fix bad values
+        if (sMin >= sMax) {
+            removePref("text_size_min"); removePref("text_size_max");
+            wMin = myPreferences.getInt("text_size_min", 100);
+            wMax = myPreferences.getInt("text_size_max", 1000);
+        }
+        // math needed to turn progress from 1 to 100 into a value between min and max
+        int sProgress = (100*(sTotal.intValue() - sMin) / (sMax - sMin));
+        mSeekBarTextSize.setProgress(sProgress);
+        TextSizeTV.setText(getText(R.string.seek_text_size) + " " + sTotal);
+    }
+
+    private void setupButtons(){
         setListener(R.id.button_previous_paragraph, new View.OnClickListener() {
             public void onClick(View v) {
                 stopSpritzing();
@@ -130,78 +272,7 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
 
 
         });
-
-            ((TelephonyManager)getSystemService(TELEPHONY_SERVICE)).listen(
-                new PhoneStateListener() {
-                    public void onCallStateChanged(int state, String incomingNumber) {
-                        if (state == TelephonyManager.CALL_STATE_RINGING) {
-                            stopSpritzing();
-                        }
-                    }
-                },
-                PhoneStateListener.LISTEN_CALL_STATE
-        );
-
-        setActive(false);
-        setActionsEnabled(false);
-
-        myApi = new ApiClientImplementation(this, this);
-        setTitle(R.string.initializing);
-
-        mSpritzerTextView.setOnCompletionListener(new Spritzer.OnCompletionListener() {
-            @Override
-            public void onComplete() {
-                if(myIsActive){
-                    if (myParagraphIndex < myParagraphsNumber) {
-                        ++myParagraphIndex;
-                        mSpritzerTextView.setSpritzText(gotoNextParagraph());
-                        mSpritzerTextView.play();
-                    }
-                }
-            }
-        });
     }
-
-    private void setupSeekBars() {
-        if (mSeekBarWpm != null && mSeekBarTextSize != null) {
-            mSeekBarWpm.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    if (progress > 0) {
-                        mSpritzerTextView.setWpm(progress);
-                        wpmTV.setText(getText(R.string.seek_wpm) + " " + progress);
-                        // getText(R.string.initialization_error)
-                        setPrefInt("mSeekBarWpm", progress);
-                    }
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-                }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                }
-            });
-            mSeekBarTextSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    mSpritzerTextView.setTextSize(progress);
-                    TextSizeTV.setText(getText(R.string.seek_text_size) + " " + myPreferences.getInt("mSeekBarTextSize", (int) mSpritzerTextView.getTextSize()));
-                    setPrefInt("mSeekBarTextSize", progress);
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-                }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                }
-            });
-        }
-    }
-
 
     private volatile int myInitializationStatus;
     private static int API_INITIALIZED = 1;
@@ -235,6 +306,18 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
     private void setPrefInt(String key, int mInt){
         myEditor = myPreferences.edit();
         myEditor.putInt(key, mInt);
+        myEditor.commit();
+    }
+
+    private void setPrefFloat(String key, float mFloat) {
+        myEditor = myPreferences.edit();
+        myEditor.putFloat(key, mFloat);
+        myEditor.commit();
+    }
+
+    private void removePref(String key){
+        myEditor = myPreferences.edit();
+        myEditor.remove(key);
         myEditor.commit();
     }
 
@@ -366,12 +449,20 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
     }
 
     private void reloadview() {
-        if (AndroidVersion > 14){
+        Intent intent = getIntent();
+        overridePendingTransition(0, 0);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        finish();
+
+        overridePendingTransition(0, 0);
+        startActivity(intent);
+
+ /*       if (AndroidVersion > 14){
             this.recreate();
         } else {
             finish();
             startActivity(getIntent());
-        }
+        } */
     }
 
     @Override
@@ -382,6 +473,7 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
     }
 
     public void launchSettings(View view) {
+        stopSpritzing();
         Intent settingsIntent = new Intent(this, SettingsActivity.class);
         startActivity(settingsIntent);
     }
