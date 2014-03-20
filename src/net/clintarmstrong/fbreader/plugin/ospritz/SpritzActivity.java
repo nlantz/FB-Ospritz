@@ -70,10 +70,9 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        myPreferences = getSharedPreferences("FBReaderOSpritz", MODE_PRIVATE);
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        myPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        int theme_style = getResources().getIdentifier(sharedPref.getString("theme_style", ""), "style", getPackageName());
+        int theme_style = getResources().getIdentifier(myPreferences.getString("theme_style", ""), "style", getPackageName());
         this.setTheme(theme_style);
 
 
