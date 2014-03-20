@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/res/values/arrays.xml -->
+    <eat-comment />
+
+    <string-array name="pref_themes">
+        <item>Light</item>
+        <item>Dark</item>
+        <item>Black</item>
+    </string-array>
+    <string-array name="pref_themes_values">
+        <item>LightTheme</item>
+        <item>DarkTheme</item>
+        <item>BlackTheme</item>
+    </string-array>
     <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/res/values/strings.xml -->
     <eat-comment />
 
@@ -193,6 +206,27 @@
         -->
         <attr name="expandActivityOverflowButtonDrawable" format="reference" />
     </declare-styleable>
+    <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/build/exploded-aar/com.larswerkman/HoloColorPicker/1.4/res/values/values.xml -->
+    <eat-comment />
+
+    <declare-styleable name="ColorBars">
+        <attr name="bar_thickness" format="dimension" />
+        <attr name="bar_length" format="dimension" />
+        <attr name="bar_pointer_radius" format="dimension" />
+        <attr name="bar_pointer_halo_radius" format="dimension" />
+        <attr name="bar_orientation_horizontal" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="ColorPicker">
+        <attr name="color_wheel_radius" format="dimension" />
+        <attr name="color_wheel_thickness" format="dimension" />
+        <attr name="color_center_radius" format="dimension" />
+        <attr name="color_center_halo_radius" format="dimension" />
+        <attr name="color_pointer_radius" format="dimension" />
+        <attr name="color_pointer_halo_radius" format="dimension" />
+    </declare-styleable>
+    <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/build/exploded-aar/com.android.support/appcompat-v7/19.0.1/res/values/values.xml -->
+    <eat-comment />
+
     <declare-styleable name="CompatTextView">
 
         <!-- Present the text in ALL CAPS. This may use a small-caps form when available. -->
@@ -378,6 +412,16 @@
         <!-- Whether space should be reserved in layout when an icon is missing. -->
         <attr name="android:preserveIconSpacing" />
     </declare-styleable>
+    <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/res/values/attrs.xml -->
+    <eat-comment />
+
+    <declare-styleable name="NumberPickerDialogPreference">
+        <attr name="android:max" />
+        <attr name="min" format="integer" />
+    </declare-styleable>
+    <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/build/exploded-aar/com.android.support/appcompat-v7/19.0.1/res/values/values.xml -->
+    <eat-comment />
+
     <declare-styleable name="SearchView">
 
         <!--
@@ -506,6 +550,21 @@
     <dimen name="abc_panel_menu_list_width">296dp</dimen>
     <dimen name="abc_search_view_preferred_width">320dip</dimen>
     <dimen name="abc_search_view_text_min_width">160dip</dimen>
+    <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/build/exploded-aar/com.larswerkman/HoloColorPicker/1.4/res/values/values.xml -->
+    <eat-comment />
+
+    <dimen name="bar_length">240dp</dimen>
+    <dimen name="bar_pointer_halo_radius">14dp</dimen>
+    <dimen name="bar_pointer_radius">6dp</dimen>
+    <dimen name="bar_thickness">4dp</dimen>
+    <dimen name="color_center_halo_radius">60dp</dimen>
+    <dimen name="color_center_radius">54dp</dimen>
+    <dimen name="color_pointer_halo_radius">18dp</dimen>
+    <dimen name="color_pointer_radius">14dp</dimen>
+    <dimen name="color_wheel_radius">124dp</dimen>
+    <dimen name="color_wheel_thickness">8dp</dimen>
+    <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/build/exploded-aar/com.android.support/appcompat-v7/19.0.1/res/values/values.xml -->
+    <eat-comment />
 
     <item name="action_bar_activity_content" type="id"/>
     <item name="action_menu_divider" type="id"/>
@@ -529,6 +588,10 @@
     <string name="abc_searchview_description_voice">Voice search</string>
     <string name="abc_shareactionprovider_share_with">Share with</string>
     <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
+    <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/res/values/strings.xml -->
+    <eat-comment />
+
+    <string name="action_settings">Settings</string>
     <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/build/exploded-aar/com.andrewgiang.spritzertextview/library/0.3.31/res/values/values.xml -->
     <eat-comment />
 
@@ -536,6 +599,11 @@
     <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/res/values/strings.xml -->
     <eat-comment />
 
+    <string name="background_color_title">Background Color</string>
+    <string name="custom_background_color_enabled_title">Custom Background Color</string>
+    <string name="custom_colors_category">Custom Colors</string>
+    <string name="custom_text_color_enabled_title">Custom Text Color</string>
+    <string name="custom_theme_section">Custom Theme</string>
     <string name="failure">Initialization failed, sorry</string>
     <string name="initialization_error">Could not get book data from FBReader.</string>
     <string name="initializing">Initializing…</string>
@@ -543,8 +611,16 @@
     <string name="no_data_for_language" formatted="false">Text-to-speech data for %0 are not installed. Trying to read book in %1.</string>
     <string name="no_tts_installed">Could not connect TTS engine on your device.</string>
     <string name="ospritz_menu_item">Open Spritz</string>
+    <string name="pref_speed_section_title">Speed Settings</string>
+    <string name="pref_text_size_section_title">Text Size Settings</string>
+    <string name="pref_theme_default">DarkTheme</string>
+    <string name="pref_theme_section_title">Themes Settings</string>
+    <string name="pref_theme_title">Theme</string>
     <string name="seek_text_size">Text Size:</string>
     <string name="seek_wpm">WPM:</string>
+    <string name="text_color_summary">Text Color</string>
+    <string name="text_color_title">Text Color</string>
+    <string name="theme_style_dialog_title">Choose a Theme</string>
     <string name="themes_prompt">Choose a theme</string>
     <string name="title">OpenSpritz Plugin</string>
     <!-- From: file:/D:/carmstrong/development/workspace/FB-Ospritz/res/values/styles.xml -->

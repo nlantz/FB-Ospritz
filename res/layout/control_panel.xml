@@ -16,6 +16,7 @@
         tools:context="net.clintarmstrong.fbreader.plugin.ospritz.SpritzActivity">
         <com.andrewgiang.textspritzer.lib.SpritzerTextView
             android:layout_marginTop="45dp"
+            android:layout_marginBottom="45dp"
             android:id="@+id/spritzTV"
             android:ems="13"
             android:minEms="13"
@@ -31,7 +32,6 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/spritzTV"
-            android:layout_marginTop="45dp"
             android:id="@+id/linearLayout">
             <TextView
                 android:layout_width="wrap_content"
