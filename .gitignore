@@ -4,8 +4,8 @@
 # Java class files
 *.class
 
-# Auto build apks
-build/apk
+# Auto build files
+build
 
 # generated files
 bin/
