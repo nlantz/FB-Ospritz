@@ -13,7 +13,7 @@
             android:defaultValue="@string/prev_list_theme_defaultValue"
             android:summary="%s" />
         <PreferenceScreen
-            android:title="@string/pref_category_customColors"
+            android:title="@string/pref_screen_customColors_title"
             android:persistent="false">
             <CheckBoxPreference
                 android:key="pref_checkbox_textColor"
@@ -39,41 +39,102 @@
                 android:dependency="pref_checkbox_backgroundColor"/>
         </PreferenceScreen>
     </PreferenceCategory>
-    <PreferenceCategory
-        android:title="@string/pref_category_wpm_title">
-        <EditTextPreference
-            android:key="pref_text_minWPM"
-            android:title="@string/pref_text_minWPM_title"
-            android:defaultValue="100"
-            android:inputType="number" />
-        <EditTextPreference
-            android:key="pref_text_maxWPM"
-            android:title="@string/pref_text_maxWPM"
-            android:defaultValue="1000"
-            android:inputType="number"/>
-    </PreferenceCategory>
-    <PreferenceCategory
-        android:title="@string/pref_category_textSize_title">
+    <PreferenceScreen
+        android:title="@string/pref_screen_sliderBars_title"
+        android:persistent="false">
+        <PreferenceCategory
+            android:title="@string/pref_category_wpm_title">
             <EditTextPreference
-                android:key="pref_text_minTextSize"
-                android:title="@string/pref_text_minTextSize_title"
-                android:defaultValue="4"
+                android:key="pref_text_minWPM"
+                android:title="@string/pref_text_minWPM_title"
+                android:defaultValue="100"
                 android:inputType="number" />
             <EditTextPreference
-                android:key="pref_text_maxTextSize"
-                android:title="@string/pref_text_maxTextSize_title"
-                android:defaultValue="50"
+                android:key="pref_text_maxWPM"
+                android:title="@string/pref_text_maxWPM"
+                android:defaultValue="1000"
                 android:inputType="number"/>
-
         </PreferenceCategory>
-<!--    <PreferenceScreen
-        android:title="@string/pref_screen_advanced_timings_title"
-        android:key="screen_advanced_timings">
-        <EditTextPreference
-            android:key="pause_length"
-            android:title="Pause Length"
-            android:defaultValue="50"
-            android:inputType="numberDecimal"/>
-    </PreferenceScreen> !-->
+        <PreferenceCategory
+            android:title="@string/pref_category_textSize_title">
+                <EditTextPreference
+                    android:key="pref_text_minTextSize"
+                    android:title="@string/pref_text_minTextSize_title"
+                    android:defaultValue="4"
+                    android:inputType="number" />
+                <EditTextPreference
+                    android:key="pref_text_maxTextSize"
+                    android:title="@string/pref_text_maxTextSize_title"
+                    android:defaultValue="50"
+                    android:inputType="number"/>
+            </PreferenceCategory>
+        </PreferenceScreen>
+    <PreferenceScreen
+        android:title="@string/pref_screen_speedSettings_title"
+        android:key="pref_screen_speedSettings">
+        <PreferenceCategory
+            android:title="@string/pref_category_delayByLetter">
+            <CheckBoxPreference
+                android:key="pref_checkbox_delayByLetter"
+                android:title="@string/pref_checkbox_delayByLetter_title"/>
+            <EditTextPreference
+                android:key="pref_text_delayByLetterMaxMultiplier"
+                android:title="@string/pref_text_delayByLetterMaxMultiplier_title"
+                android:defaultValue="2.8"
+                android:inputType="numberDecimal"
+                android:dependency="pref_checkbox_delayByLettter"/>
+            <EditTextPreference
+                android:key="pref_text_delayByLetterMinMultiplier"
+                android:title="@string/pref_text_delayByLetterMinMultiplier_title"
+                android:defaultValue="0.22"
+                android:inputType="numberDecimal"
+                android:dependency="pref_checkbox_delayByLettter"/>
+        </PreferenceCategory>
+        <PreferenceCategory
+            android:title="@string/pref_category_longWordDelay">
+            <CheckBoxPreference
+                android:key="pref_checkbox_longWordDelay"
+                android:title="@string/pref_checkbox_longWordDelay_title"/>
+            <EditTextPreference
+                android:key="pref_text_longWordCharacters"
+                android:title="@string/pref_text_longWordCharacters_title"
+                android:defaultValue="7"
+                android:inputType="number"
+                android:dependency="pref_checkbox_longWordDelay"/>
+            <EditTextPreference
+                android:key="pref_text_longWordDelay"
+                android:title="@string/pref_text_longWordDelay_title"
+                android:defaultValue="2"
+                android:inputType="numberDecimal"
+                android:dependency="pref_checkbox_longWordDelay"/>
+        </PreferenceCategory>
+        <PreferenceCategory
+            android:title="@string/pref_category_punctuationDelay_title">
+            <CheckBoxPreference
+                android:key="pref_checkbox_punctuationDelay"
+                android:title="@string/pref_checkbox_punctuationDelay_title"/>
+            <EditTextPreference
+                android:key="pref_text_punctuationDelayCharacters"
+                android:title="@string/pref_text_punctuationDelayCharacters_title"
+                android:defaultValue=",;:.?!/"
+                android:dependency="pref_checkbox_punctuationDelay"/>
+            <EditTextPreference
+                android:key="pref_text_punctuationDelayMultiplier"
+                android:title="@string/pref_text_punctuationDelayMultiplier_title"
+                android:defaultValue="1.5"
+                android:dependency="pref_checkbox_punctuationDelay"/>
+        </PreferenceCategory>
+        <PreferenceCategory
+            android:title="@string/pref_category_paragraphDelay_title">
+            <CheckBoxPreference
+                android:key="pref_checkbox_paragraphDelay"
+                android:title="@string/pref_checkbox_paragraphDelay_title"/>
+            <EditTextPreference
+                android:key="pref_text_paragraphDelayMultiplier"
+                android:title="@string/pref_text_paragraphDelayMultiplier_title"
+                android:defaultValue="3"
+                android:dependency="pref_checkbox_paragraphDelay"/>
+        </PreferenceCategory>
+    </PreferenceScreen>
 
 </PreferenceScreen>

@@ -23,9 +23,26 @@
     <string name="pref_holoColor_backgroundColor_dialogTitle">Background Color</string>
     <string name="pref_checkbox_textColor_title">Custom Text Color</string>
     <string name="pref_checkbox_backgroundColor_title">Custom Background Color</string>
-    <string name="pref_category_customColors">Custom Colors</string>
+    <string name="pref_screen_customColors_title">Custom Colors</string>
     <string name="pref_text_minWPM_title">Min WPM</string>
     <string name="pref_text_maxWPM">Max WPM</string>
     <string name="pref_text_minTextSize_title">Min Text Size</string>
     <string name="pref_text_maxTextSize_title">Max Text Size</string>
+    <string name="pref_screen_sliderBars_title">Slider Preferences</string>
+    <string name="pref_screen_speedSettings_title">Speed Settings</string>
+    <string name="pref_category_longWordDelay">Long Word Delay</string>
+    <string name="pref_text_longWordDelay_title">Long Word Delay Multiplier</string>
+    <string name="pref_text_longWordCharacters_title">Number of Characters</string>
+    <string name="pref_checkbox_longWordDelay_title">Enable Delay Multipler for Long Words</string>
+    <string name="pref_category_delayByLetter">Delay Per Letter</string>
+    <string name="pref_checkbox_delayByLetter_title">Enable Delay Per Letter (wpm based on 4.5 letter word)</string>
+    <string name="pref_text_delayByLetterMaxMultiplier_title">Maximum Letter Delay Multiplier (lower means faster long words)</string>
+    <string name="pref_text_delayByLetterMinMultiplier_title">Minimum Letter Delay Multiplier (lower means faster short words)</string>
+    <string name="pref_category_punctuationDelay_title">Punctuation Delay</string>
+    <string name="pref_checkbox_punctuationDelay_title">Enable Punctuation Delay</string>
+    <string name="pref_text_punctuationDelayCharacters_title">Punctuation Characters</string>
+    <string name="pref_text_punctuationDelayMultiplier_title">Punctuation Delay Multiplier</string>
+    <string name="pref_category_paragraphDelay_title">Paragraph Delay</string>
+    <string name="pref_checkbox_paragraphDelay_title">Enable Paragraph Delay</string>
+    <string name="pref_text_paragraphDelayMultiplier_title">Paragraph Delay Multiplier</string>
 </resources>
