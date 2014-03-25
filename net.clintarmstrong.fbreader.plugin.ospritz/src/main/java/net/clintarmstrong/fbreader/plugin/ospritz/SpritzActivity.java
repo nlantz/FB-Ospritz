@@ -25,6 +25,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.SeekBar;
@@ -33,10 +34,16 @@ import android.widget.Toast;
 
 import net.clintarmstrong.textspritzer.lib.Spritzer;
 import net.clintarmstrong.textspritzer.lib.SpritzerTextView;
+import net.clintarmstrong.textspritzer.lib.WordObj;
+import net.clintarmstrong.textspritzer.lib.WordStrategy;
+import net.clintarmstrong.textspritzer.lib.WordUtils;
 
 import org.geometerplus.android.fbreader.api.ApiClientImplementation;
 import org.geometerplus.android.fbreader.api.ApiException;
 import org.geometerplus.android.fbreader.api.TextPosition;
+
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class SpritzActivity extends Activity implements ApiClientImplementation.ConnectionListener {
 
@@ -58,6 +65,8 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
     private int initialTheme;
     private boolean initialTextColorEnabled = false;
     private boolean initialBackgroundColorEnabled = false;
+    protected static int PROCESS_AHEAD = 2;
+    private WordStrategy wordStrategyChangeChecker;
 
 
     private void setListener(int id, View.OnClickListener listener) {
@@ -90,19 +99,59 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         mSeekBarWpm = (SeekBar) findViewById(R.id.seekbar_wpm);
 
         setupButtons();
-        setSpritzerListener();
+        setCallbackListener();
 
         myApi = new ApiClientImplementation(this, this);
+
+        mSpritzerTextView.setOnClickControlListener(new SpritzerTextView.OnClickControlListener() {
+            @Override
+            public void onPause() {
+                stopSpritzing();
+            }
+
+            @Override
+            public void onPlay() {
+                setActive(true);
+                mSpritzerTextView.play();
+            }
+        });
     }
 
     // onresume is created after oncreate, so no need to run these in oncreate as well.
     @Override
     protected void onResume(){
         super.onResume();
+        grabPreferences();
         setThemeFromPref();
         setupSeekBars();
+        setWordStrategy();
+        try {
+            resetReadingPosition();
+            mSpritzerTextView.setSpritzText(gotoNextParagraph());
+            highlightParagraph(readingParagraphQueue.remove());
+            preProcessText();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
+    private void setCallbackListener(){
+        mSpritzerTextView.setCallbackListener(new Spritzer.CallBackListener() {
+            @Override
+            public void onCallBackListener(int callback) {
+                switch (callback) {
+                    case 1:
+                        Log.d(TAG, "Got Callback" + callback);
+                        ++myParagraphIndex;
+                        mSpritzerTextView.addSpritzText(gotoNextParagraph());
+                        highlightParagraph(readingParagraphQueue.remove());
+                        preProcessText();
+                }
+            }
+        });
+    }
+
+/*
     private void setSpritzerListener(){
         mSpritzerTextView.setRemainingWordsListener( new Spritzer.RemainingWordsListener() {
             @Override
@@ -117,6 +166,101 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
             }
         });
         mSpritzerTextView.setWordsRemainingToTriggerListener(0);
+    }
+*/
+    public boolean delayByLetter;
+    public float delayByLetterMaxMultiplier;
+    public float delayByLetterMinMultiplier;
+    public boolean longWordDelay;
+    public int longWordCharacters;
+    public float longWordDelayAdd;
+    public boolean punctuationDelay;
+    public char[] punctuationDelayCharacters;
+    public float punctuationDelayAdd;
+    public boolean paragraphDelay;
+    public float paragraphDelayAdd;
+
+    private void grabPreferences(){
+        delayByLetter = myPreferences.getBoolean("pref_checkbox_delayByLetter", true);
+            delayByLetterMaxMultiplier = Float.parseFloat(myPreferences.getString("pref_text_delayByLetterMaxMultiplier", "2.8"));
+            delayByLetterMinMultiplier = Float.parseFloat(myPreferences.getString("pref_text_delayByLetterMinMultiplier", "0.22"));
+        longWordDelay = myPreferences.getBoolean("pref_checkbox_longWordDelay", false);
+            longWordCharacters = Integer.parseInt(myPreferences.getString("pref_text_longWordCharacters", "7"));
+            longWordDelayAdd = Float.parseFloat(myPreferences.getString("pref_text_longWordDelayAdd", "2"));
+        punctuationDelay = myPreferences.getBoolean("pref_checkbox_punctuationDelay", true);
+            punctuationDelayCharacters = myPreferences.getString("pref_text_punctuationDelayCharacters", ",;:.?!/").toCharArray();
+            punctuationDelayAdd = Float.parseFloat(myPreferences.getString("pref_text_punctuationDelayAdd", "1"));
+        paragraphDelay = myPreferences.getBoolean("pref_checkbox_paragraphDelay", true);
+            paragraphDelayAdd = Float.parseFloat(myPreferences.getString("pref_text_paragraphDelayAdd", "2"));
+    }
+
+    private boolean nextCallback;
+    private void setWordStrategy() {
+        mSpritzerTextView.setWordStrategy(new WordStrategy() {
+            // import the default word strategy so we can use some of it's useful methods
+            protected static final int MAX_WORD_LENGTH = 13;
+            protected static final float AVERAGE_WORD_LENGTH = (float) 4.5;
+
+            @Override
+            public WordObj parseWord(String input){
+                WordObj retWordObj = new WordObj();
+
+                // Split first word from string. wordArray[0] will be the separated word we want to process, wordArray[1] is the remaining string.
+                String[] wordArray = WordUtils.getNextWord(input);
+
+                // if there is no text remaining, set callback to 1 so that this thread can be notified.
+                // Useful for adding more text at regular intervals.
+                Log.d(TAG, "word array length: " + wordArray.length);
+
+                if (nextCallback) {
+                    retWordObj.callback = 1;
+                    nextCallback = false;
+                }
+
+                if (wordArray[1].toString().length() > 0) {
+                    retWordObj.remainingWords = wordArray[1];
+                } else {
+                    nextCallback = true;
+                }
+                String word = wordArray[0];
+                float delayMultiplier = 1;
+
+                // Split long words
+                if (word.length() > MAX_WORD_LENGTH) {
+                    String[] longWordArr = WordUtils.splitLongWord(word, MAX_WORD_LENGTH);
+                    word = longWordArr[0];
+                    retWordObj.remainingWords = retWordObj.remainingWords + longWordArr[1] + " ";
+                }
+
+                // set delay from preferences
+                if (delayByLetter){
+                    if (word.length() > 4.5) {
+                        delayMultiplier = word.length() * ( delayByLetterMaxMultiplier/(MAX_WORD_LENGTH - AVERAGE_WORD_LENGTH) );
+                    } else if (word.length() < 4.5 ) {
+                        delayMultiplier = word.length() * ( delayByLetterMinMultiplier );
+                    }
+                }
+                if (longWordDelay){
+                    if (word.length() >= longWordCharacters) delayMultiplier += longWordDelayAdd;
+                }
+                if (punctuationDelay){
+                    for (char punctChar : punctuationDelayCharacters){
+                        if (word.contains(Character.toString(punctChar))){
+                            delayMultiplier += punctuationDelayAdd;
+                            break;
+                        }
+                    }
+                }
+                if (paragraphDelay){
+                    if (wordArray[1].toString().length() <= 0) delayMultiplier += paragraphDelayAdd;
+                }
+
+                retWordObj.parsedWord = word;
+                retWordObj.delayMultiplier = delayMultiplier;
+
+                return retWordObj;
+            }
+        });
     }
 
     private void setThemeFromPref(){
@@ -234,6 +378,22 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         TextSizeTV.setText(getText(R.string.tv_textSize_text) + " " + (float) textSize/10);
     }
 
+    private void resetReadingPosition(){
+        while (readingParagraphQueue.size() > 1) readingParagraphQueue.remove();
+        myParagraphIndex = readingParagraphQueue.remove();
+        mSpritzerTextView.setSpritzText(gotoNextParagraph());
+        highlightParagraph(readingParagraphQueue.remove());
+    }
+
+    private void preProcessText(){
+        Log.d(TAG,"Running preprocess, queue size: " + readingParagraphQueue.size());
+        while (readingParagraphQueue.size() < PROCESS_AHEAD){
+            ++myParagraphIndex;
+            mSpritzerTextView.addSpritzText(gotoNextParagraph());
+        }
+        Log.d(TAG,"Finished preprocess, queue size: " + readingParagraphQueue.size());
+    }
+
     private void setupButtons(){
         setListener(R.id.button_previousParagraph, new View.OnClickListener() {
             public void onClick(View v) {
@@ -245,8 +405,11 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
             public void onClick(View v) {
                 stopSpritzing();
                 if (myParagraphIndex < myParagraphsNumber) {
+                    resetReadingPosition();
                     ++myParagraphIndex;
-                    gotoNextParagraph();
+                    mSpritzerTextView.setSpritzText(gotoNextParagraph());
+                    highlightParagraph(readingParagraphQueue.remove());
+                    preProcessText();
                 }
             }
         });
@@ -285,10 +448,12 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         }
     }
 
+    private Queue<Integer> readingParagraphQueue;
     private void onInitializationCompleted() {
         try {
             setTitle(myApi.getBookTitle());
 
+            readingParagraphQueue = new LinkedList<Integer>();
             myParagraphIndex = myApi.getPageStart().ParagraphIndex;
             myParagraphsNumber = myApi.getParagraphsNumber();
             setActionsEnabled(true);
@@ -299,6 +464,8 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
             e.printStackTrace();
         }
         mSpritzerTextView.setSpritzText(gotoNextParagraph());
+        highlightParagraph(readingParagraphQueue.remove());
+        preProcessText();
     }
 
     private void setPrefInt(String key, int mInt){
@@ -314,6 +481,7 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
     }
 
     private void gotoPreviousParagraph() {
+        resetReadingPosition();
         try {
             for (int i = myParagraphIndex - 1; i >= 0; --i) {
                 if (myApi.getParagraphText(i).length() > 0) {
@@ -324,7 +492,9 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
             if (myApi.getPageStart().ParagraphIndex >= myParagraphIndex) {
                 myApi.setPageStart(new TextPosition(myParagraphIndex, 0, 0));
             }
-            highlightParagraph(myParagraphIndex);
+            mSpritzerTextView.setSpritzText(gotoNextParagraph());
+            highlightParagraph(readingParagraphQueue.remove());
+            preProcessText();
             runOnUiThread(new Runnable() {
                 public void run() {
                     findViewById(R.id.button_nextParagraph).setEnabled(true);
@@ -336,6 +506,7 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         }
     }
 
+
     private String gotoNextParagraph() {
         try {
             String text = "";
@@ -346,7 +517,8 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
                     break;
                 }
             }
-            highlightParagraph(myParagraphIndex);
+            readingParagraphQueue.add(myParagraphIndex);
+    //        highlightParagraph(myParagraphIndex);
             if (myParagraphIndex >= myParagraphsNumber) {
                 runOnUiThread(new Runnable() {
                     public void run() {
@@ -420,19 +592,24 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         });
     }
 
-    private void highlightParagraph(int paragraphIndex) throws ApiException {
-        if (!"".equals(myApi.getParagraphText(paragraphIndex)) && !myApi.isPageEndOfText()) {
-            myApi.setPageStart(new TextPosition(paragraphIndex, 0, 0));
-        }
-        if (0 <= paragraphIndex && paragraphIndex < myParagraphsNumber) {
-            myApi.highlightArea(
-                    new TextPosition(paragraphIndex, 0, 0),
-                    new TextPosition(paragraphIndex, Integer.MAX_VALUE, 0)
-            );
-        } else {
-            myApi.clearHighlighting();
+    private void highlightParagraph(int paragraphIndex) {
+        try {
+            if (!"".equals(myApi.getParagraphText(paragraphIndex)) && !myApi.isPageEndOfText()) {
+                myApi.setPageStart(new TextPosition(paragraphIndex, 0, 0));
+            }
+            if (0 <= paragraphIndex && paragraphIndex < myParagraphsNumber) {
+                myApi.highlightArea(
+                        new TextPosition(paragraphIndex, 0, 0),
+                        new TextPosition(paragraphIndex, Integer.MAX_VALUE, 0)
+                );
+            } else {
+                myApi.clearHighlighting();
+            }
+        } catch (ApiException e) {
+            e.printStackTrace();
         }
     }
+
     private void stopSpritzing() {
         setActive(false);
         mSpritzerTextView.pause();

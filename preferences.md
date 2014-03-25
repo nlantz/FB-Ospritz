@@ -26,7 +26,7 @@ The latest version includes several advanced preferences
         - Minimum Letter Delay Multiplier: This delay multiplier will be applied for a 1 character word. This setting affects all words with less than 4.5 characters.
         By default, a 1 character word will be displayed at .22 of your set WPM. A 3 character word will be displayed at .66 of your set WPM.
         If you want short words to display longer, closer to your set WPM, set this number closer to 1.
-    - Long Word Delay: This is a simpler setting for simply delaying longer words more. This is cumulative with the Delay By Letter setting.
+    - Long Word Delay: This is a simpler setting for simply delaying longer words more. This is additive with the Delay By Letter setting.
     This means that if both options are enabled, the delay will first be calculated based on the number of letters, then long words will be delayed even longer by this setting.
     You probably do not want both enabled at once.
         - Number of Characters: The number of characters to signify a long word.
@@ -37,5 +37,5 @@ The latest version includes several advanced preferences
         - Punctuation Characters: Any characters in this field will trigger a punctuation delay
         - Punctuation Delay Multiplier: Words with punctuation will have an additional delay of this * WPM.
     - Paragraph Delay: This delay is not based on the word, but is an additive delay for the paragraph itself. So if the last word in a paragraph is 13 characters, and it
-    is delayed 3*wpm because of it's length, and the paragraph triggers a 2*wpm delay, the word will be displayed for 5*wpm, not 6*wpm.
+    is delayed 3*wpm because of it's length, and is delayed 2*wpm because of punctuation, and the paragraph triggers a 2*wpm delay, the word will be displayed for 7*wpm.
         - Paragraph Delay Multiplier: The last word in the paragraph will have an additional delay of this * WPM.
