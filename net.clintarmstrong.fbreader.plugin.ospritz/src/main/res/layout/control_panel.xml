@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="net.clintarmstrong.fbreader.plugin.ospritz.SpritzActivity">
-        <com.andrewgiang.textspritzer.lib.SpritzerTextView
+        <net.clintarmstrong.textspritzer.lib.SpritzerTextView
             android:layout_marginTop="45dp"
             android:layout_marginBottom="45dp"
             android:id="@+id/spritzTV"
@@ -31,32 +31,31 @@
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/spritzTV"
-            android:id="@+id/linearLayout">
+            android:layout_below="@+id/spritzTV">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/seek_wpm"
-                android:id="@+id/wpm_text" />
+                android:text="@string/tv_wpm_text"
+                android:id="@+id/tv_wpm" />
 
             <SeekBar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/seekBarWpm"
+                android:id="@+id/seekbar_wpm"
                 android:max="100"
                 android:indeterminate="false" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/seek_text_size"
-                android:id="@+id/text_size_text"
+                android:text="@string/tv_textSize_text"
+                android:id="@+id/tv_textSize"
                  />
 
             <SeekBar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/seekBarTextSize"
+                android:id="@+id/seekbar_textSize"
                 android:max="100"/>
         </LinearLayout>
     </RelativeLayout >
@@ -65,7 +64,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         >
-        <ImageButton android:id="@+id/button_previous_paragraph"
+        <ImageButton android:id="@+id/button_previousParagraph"
             android:layout_width="70dip"
             android:layout_height="50dip"
             android:layout_weight="1"
@@ -82,11 +81,8 @@
             android:layout_height="50dip"
             android:layout_weight="0"
             android:src="@android:drawable/ic_menu_preferences"
-            android:onClick="launchSettings"
-            android:layout_alignTop="@+id/linearLayout"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-        <ImageButton android:id="@+id/button_next_paragraph"
+            android:onClick="launchSettings" />
+        <ImageButton android:id="@+id/button_nextParagraph"
             android:layout_width="70dip"
             android:layout_height="50dip"
             android:layout_weight="1"

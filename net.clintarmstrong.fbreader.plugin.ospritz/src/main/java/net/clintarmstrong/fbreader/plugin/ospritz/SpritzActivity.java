@@ -31,8 +31,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.andrewgiang.textspritzer.lib.Spritzer;
-import com.andrewgiang.textspritzer.lib.SpritzerTextView;
+import net.clintarmstrong.textspritzer.lib.Spritzer;
+import net.clintarmstrong.textspritzer.lib.SpritzerTextView;
 
 import org.geometerplus.android.fbreader.api.ApiClientImplementation;
 import org.geometerplus.android.fbreader.api.ApiException;
@@ -55,7 +55,6 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
     private boolean myIsActive = false;
     private ApiClientImplementation myApi;
     private volatile PowerManager.WakeLock myWakeLock;
-    private int AndroidVersion = android.os.Build.VERSION.SDK_INT;
     private int initialTheme;
     private boolean initialTextColorEnabled = false;
     private boolean initialBackgroundColorEnabled = false;
@@ -72,7 +71,7 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         myPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         // store initial theme, so we can tell if it has changed and if we need to reload it later.
-        initialTheme = getResources().getIdentifier(myPreferences.getString("theme_style", getString(R.string.pref_theme_default)), "style", getPackageName());
+        initialTheme = getResources().getIdentifier(myPreferences.getString("theme_style", getString(R.string.prev_list_theme_defaultValue)), "style", getPackageName());
         this.setTheme(initialTheme);
 
         setContentView(R.layout.control_panel);
@@ -83,12 +82,12 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         setActionsEnabled(false);
 
         // get all of the views we'll need later
-        wpmTV = (TextView) findViewById(R.id.wpm_text);
-        TextSizeTV = (TextView) findViewById(R.id.text_size_text);
+        wpmTV = (TextView) findViewById(R.id.tv_wpm);
+        TextSizeTV = (TextView) findViewById(R.id.tv_textSize);
         mSpritzerTextView = (SpritzerTextView) findViewById(R.id.spritzTV);
         mSpritzer = mSpritzerTextView.getSpritzer();
-        mSeekBarTextSize = (SeekBar) findViewById(R.id.seekBarTextSize);
-        mSeekBarWpm = (SeekBar) findViewById(R.id.seekBarWpm);
+        mSeekBarTextSize = (SeekBar) findViewById(R.id.seekbar_textSize);
+        mSeekBarWpm = (SeekBar) findViewById(R.id.seekbar_wpm);
 
         setupButtons();
         setSpritzerListener();
@@ -105,9 +104,9 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
     }
 
     private void setSpritzerListener(){
-        mSpritzerTextView.setOnCompletionListener(new Spritzer.OnCompletionListener() {
+        mSpritzerTextView.setRemainingWordsListener( new Spritzer.RemainingWordsListener() {
             @Override
-            public void onComplete() {
+            public void onWordsRemaining() {
                 if(myIsActive){
                     if (myParagraphIndex < myParagraphsNumber) {
                         ++myParagraphIndex;
@@ -117,10 +116,11 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
                 }
             }
         });
+        mSpritzerTextView.setWordsRemainingToTriggerListener(0);
     }
 
     private void setThemeFromPref(){
-        int theme_style = getResources().getIdentifier(myPreferences.getString("theme_style", getString(R.string.pref_theme_default)), "style", getPackageName());
+        int theme_style = getResources().getIdentifier(myPreferences.getString("theme_style", getString(R.string.prev_list_theme_defaultValue)), "style", getPackageName());
         boolean custom_text_color_enabled = myPreferences.getBoolean("custom_text_color_enabled", false);
         boolean custom_background_color_enabled = myPreferences.getBoolean("custom_background_color_enabled", false);
     //    this.setTheme(theme_style);
@@ -147,14 +147,14 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
 
         // Setup listener for changes.
         mSeekBarWpm.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            int min = myPreferences.getInt("wpm_min", 100);
+            int minWPM = Integer.parseInt(myPreferences.getString("pref_text_minWPM", "100"));
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            public void onProgressChanged(SeekBar seekBar, int wpmSeekBarProgress, boolean fromUser) {
                 // math needed to turn progress from 1 to 100 into a value between min and max
-                int total = progress + min;
-                mSpritzerTextView.setWpm(total);
-                wpmTV.setText(getText(R.string.seek_wpm) + " " + total);
-                setPrefInt("wpm_speed", total);
+                int wpm = wpmSeekBarProgress + minWPM;
+                mSpritzerTextView.setWpm(wpm);
+                wpmTV.setText(getText(R.string.tv_wpm_text) + " " + wpm);
+                setPrefInt("pref_int_wpm", wpm);
             }
 
             @Override
@@ -165,37 +165,35 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
-        int wTotal = myPreferences.getInt("wpm_speed", 250);
-        int wMin = myPreferences.getInt("wpm_min", 100);
-        int wMax = myPreferences.getInt("wpm_max", 1000);
+        int wpm = myPreferences.getInt("pref_int_wpm", 250);
+        int minWPM = Integer.parseInt(myPreferences.getString("pref_text_minWPM", "100"));
+        int maxWPM = Integer.parseInt(myPreferences.getString("pref_text_maxWPM", "1000"));
         // fix bad values
-        if (wTotal > wMax || wTotal < wMin) {
-            removePref("wpm_speed");
-            wTotal = myPreferences.getInt("wpm_speed", 250);}
+        if (wpm > maxWPM || wpm < minWPM) {
+            removePref("pref_int_wpm");
+            wpm = myPreferences.getInt("pref_int_wpm", 250);}
         // fix bad values
-        if (wMin >= wMax) {
-            removePref("wpm_min"); removePref("wpm_max");
-            wMin = myPreferences.getInt("wpm_min", 100);
-            wMax = myPreferences.getInt("wpm_max", 1000);
+        if (minWPM >= maxWPM) {
+            removePref("pref_text_minWPM"); removePref("pref_text_maxWPM");
+            minWPM = myPreferences.getInt("wpm_min", 100);
+            maxWPM = myPreferences.getInt("wpm_max", 1000);
         }
         // math needed to turn progress from 1 to 100 into a value between min and max
-        mSeekBarWpm.setMax(wMax - wMin);
-        int wProgress = (wTotal - wMin);
-        mSeekBarWpm.setProgress(wProgress);
+        mSeekBarWpm.setMax(maxWPM - minWPM);
+        int wpmSeekBarProgress = (wpm - minWPM);
+        mSeekBarWpm.setProgress(wpmSeekBarProgress);
         // this shouldn't be needed, setprogress should trigger onProgressChanged
-        // wpmTV.setText(getText(R.string.seek_wpm) + " " + wTotal);
+        // wpmTV.setText(getText(R.string.seek_wpm) + " " + wpm);
 
         // listen for changes to size bar
         mSeekBarTextSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            int min = myPreferences.getInt("text_size_min", 4)*10;
+            int minTextSize = Integer.parseInt(myPreferences.getString("pref_text_minTextSize", "4"))*10;
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                // math needed to turn progress from 1 to 100 into a value between min and max
-                // total is a float here because font sizes may not be integers
-                int total = progress + min;
-                mSpritzerTextView.setTextSize(total/10);
-                TextSizeTV.setText(getText(R.string.seek_text_size) + " " + (float) total/10);
-                setPrefInt("text_size", total);
+            public void onProgressChanged(SeekBar seekBar, int textSizeSeekBarProgress, boolean fromUser) {
+                int textSize = textSizeSeekBarProgress + minTextSize;
+                mSpritzerTextView.setTextSize(textSize/10);
+                TextSizeTV.setText(getText(R.string.tv_textSize_text) + " " + (float) textSize/10);
+                setPrefInt("pref_int_textSize", textSize);
             }
 
             @Override
@@ -207,46 +205,43 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
             }
         });
 
-        int sTotal;
-        // catch if pref is stored as int, probably won't happen in prod, but happened to me while developing.
+        int textSize;
+        // catch if pref is not stored as int, probably won't happen in prod, but happened to me while developing.
         try {
-            sTotal = myPreferences.getInt("text_size", 200);
+            textSize = myPreferences.getInt("pref_int_textSize", 200);
         } catch (ClassCastException e) {
-            removePref("text_size");
-            sTotal = myPreferences.getInt("text_size", 200);
+            removePref("pref_int_textSize");
+            textSize = myPreferences.getInt("pref_int_textSize", 200);
         }
 
-        int sMin = myPreferences.getInt("text_size_min", 4)*10;
-        int sMax = myPreferences.getInt("text_size_max", 50)*10;
+        int minTextSize = Integer.parseInt(myPreferences.getString("pref_text_minTextSize", "4"))*10;
+        int maxTextSize = Integer.parseInt(myPreferences.getString("pref_text_minTextSize", "50"))*10;
         // fix bad values
-        if (sTotal > sMax || sTotal < sMin) {
-            Toast.makeText(SpritzActivity.this, "smax " + sMax, Toast.LENGTH_SHORT).show();
-            Toast.makeText(SpritzActivity.this, "smin " + sMin, Toast.LENGTH_SHORT).show();
-            Toast.makeText(SpritzActivity.this, "stotal " + sTotal, Toast.LENGTH_SHORT).show();
-            removePref("text_size");
-            sTotal = myPreferences.getInt("text_size", 200);
+        if (textSize > maxTextSize || textSize < minTextSize) {
+            removePref("pref_int_textSize");
+            textSize = myPreferences.getInt("pref_int_textSize", 200);
         }
         // fix bad values
-        if (sMin >= sMax) {
-            removePref("text_size_min"); removePref("text_size_max");
-            sMin = myPreferences.getInt("text_size_min", 4);
-            sMax = myPreferences.getInt("text_size_max", 50);
+        if (minTextSize >= maxTextSize) {
+            removePref("pref_text_minTextSize"); removePref("pref_text_minTextSize");
+            minTextSize = Integer.parseInt(myPreferences.getString("pref_text_minTextSize", "4"))*10;
+            maxTextSize = Integer.parseInt(myPreferences.getString("pref_text_minTextSize", "50"))*10;
         }
         // math needed to allow .1 font sizes
-        mSeekBarTextSize.setMax(sMax - sMin);
-        int sProgress = (sTotal - sMin);
+        mSeekBarTextSize.setMax(maxTextSize - minTextSize);
+        int sProgress = (textSize - minTextSize);
         mSeekBarTextSize.setProgress(sProgress);
-        TextSizeTV.setText(getText(R.string.seek_text_size) + " " + (float) sTotal/10);
+        TextSizeTV.setText(getText(R.string.tv_textSize_text) + " " + (float) textSize/10);
     }
 
     private void setupButtons(){
-        setListener(R.id.button_previous_paragraph, new View.OnClickListener() {
+        setListener(R.id.button_previousParagraph, new View.OnClickListener() {
             public void onClick(View v) {
                 stopSpritzing();
                 gotoPreviousParagraph();
             }
         });
-        setListener(R.id.button_next_paragraph, new View.OnClickListener() {
+        setListener(R.id.button_nextParagraph, new View.OnClickListener() {
             public void onClick(View v) {
                 stopSpritzing();
                 if (myParagraphIndex < myParagraphsNumber) {
@@ -269,7 +264,7 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         setListener(R.id.button_play, new View.OnClickListener() {
             public void onClick(View v) {
                 setActive(true);
-                mSpritzerTextView.setSpritzText(gotoNextParagraph());
+            //    mSpritzerTextView.setSpritzText(gotoNextParagraph());
                 mSpritzerTextView.play();
             }
 
@@ -312,12 +307,6 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         myEditor.commit();
     }
 
-    private void setPrefFloat(String key, float mFloat) {
-        myEditor = myPreferences.edit();
-        myEditor.putFloat(key, mFloat);
-        myEditor.commit();
-    }
-
     private void removePref(String key){
         myEditor = myPreferences.edit();
         myEditor.remove(key);
@@ -338,7 +327,7 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
             highlightParagraph();
             runOnUiThread(new Runnable() {
                 public void run() {
-                    findViewById(R.id.button_next_paragraph).setEnabled(true);
+                    findViewById(R.id.button_nextParagraph).setEnabled(true);
                     findViewById(R.id.button_play).setEnabled(true);
                 }
             });
@@ -364,7 +353,7 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
             if (myParagraphIndex >= myParagraphsNumber) {
                 runOnUiThread(new Runnable() {
                     public void run() {
-                        findViewById(R.id.button_next_paragraph).setEnabled(false);
+                        findViewById(R.id.button_nextParagraph).setEnabled(false);
                         findViewById(R.id.button_play).setEnabled(false);
                     }
                 });
@@ -416,8 +405,8 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
     private void setActionsEnabled(final boolean enabled) {
         runOnUiThread(new Runnable() {
             public void run() {
-                findViewById(R.id.button_previous_paragraph).setEnabled(enabled);
-                findViewById(R.id.button_next_paragraph).setEnabled(enabled);
+                findViewById(R.id.button_previousParagraph).setEnabled(enabled);
+                findViewById(R.id.button_nextParagraph).setEnabled(enabled);
                 findViewById(R.id.button_play).setEnabled(enabled);
             }
         });
@@ -446,9 +435,7 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
     }
     private void stopSpritzing() {
         setActive(false);
-        if (mSpritzer.isPlaying()) {
-            mSpritzerTextView.pause();
-        }
+        mSpritzerTextView.pause();
     }
 
     private void reloadview() {
@@ -459,13 +446,6 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
 
         overridePendingTransition(0, 0);
         startActivity(intent);
-
- /*       if (AndroidVersion > 14){
-            this.recreate();
-        } else {
-            finish();
-            startActivity(getIntent());
-        } */
     }
 
     @Override

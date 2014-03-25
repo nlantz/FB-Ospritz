@@ -1,1 +1,1 @@
-include ':net.clintarmstrong.fbreader.plugin.ospritz'
+include ':net.clintarmstrong.fbreader.plugin.ospritz', 'net.usikkert.kouchat.android.component'
