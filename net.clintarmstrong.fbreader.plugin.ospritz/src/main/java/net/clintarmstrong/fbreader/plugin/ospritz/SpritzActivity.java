@@ -324,7 +324,7 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
             if (myApi.getPageStart().ParagraphIndex >= myParagraphIndex) {
                 myApi.setPageStart(new TextPosition(myParagraphIndex, 0, 0));
             }
-            highlightParagraph();
+            highlightParagraph(myParagraphIndex);
             runOnUiThread(new Runnable() {
                 public void run() {
                     findViewById(R.id.button_nextParagraph).setEnabled(true);
@@ -346,10 +346,7 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
                     break;
                 }
             }
-            if (!"".equals(text) && !myApi.isPageEndOfText()) {
-                myApi.setPageStart(new TextPosition(myParagraphIndex, 0, 0));
-            }
-            highlightParagraph();
+            highlightParagraph(myParagraphIndex);
             if (myParagraphIndex >= myParagraphsNumber) {
                 runOnUiThread(new Runnable() {
                     public void run() {
@@ -423,11 +420,14 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         });
     }
 
-    private void highlightParagraph() throws ApiException {
-        if (0 <= myParagraphIndex && myParagraphIndex < myParagraphsNumber) {
+    private void highlightParagraph(int paragraphIndex) throws ApiException {
+        if (!"".equals(myApi.getParagraphText(paragraphIndex)) && !myApi.isPageEndOfText()) {
+            myApi.setPageStart(new TextPosition(paragraphIndex, 0, 0));
+        }
+        if (0 <= paragraphIndex && paragraphIndex < myParagraphsNumber) {
             myApi.highlightArea(
-                    new TextPosition(myParagraphIndex, 0, 0),
-                    new TextPosition(myParagraphIndex, Integer.MAX_VALUE, 0)
+                    new TextPosition(paragraphIndex, 0, 0),
+                    new TextPosition(paragraphIndex, Integer.MAX_VALUE, 0)
             );
         } else {
             myApi.clearHighlighting();
