@@ -402,6 +402,11 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
             findViewById(R.id.seekbar_wpm).setVisibility(View.VISIBLE);
             findViewById(R.id.tv_wpm).setVisibility(View.VISIBLE);
         }
+        if (!myPreferences.getBoolean("pref_checkbox_enableBackgroundDimming", true)) {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        } else {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        }
         View view = getWindow().getDecorView();
         WindowManager.LayoutParams lp = (WindowManager.LayoutParams) view.getLayoutParams();
         try {

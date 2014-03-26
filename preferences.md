@@ -11,6 +11,7 @@ The latest version includes several advanced preferences
     - Custom Colors
         - Text Color
         - Background Color
+    - Disable Background Dimming: Prevent the background from being dimmed when Spritzing.
 - Window Position: Adjust where the window appears, can be very useful when combined with a dynamic window size, allowing you to see supplemental materials in the book without closing the plugin.
     - Horizontal Position
         - Left

@@ -58,4 +58,5 @@
     <string name="pref_list_windowPositionVertical_dialogTitle">Choose a Virtical Window Position</string>
     <string name="pref_category_controls_title">Controls</string>
     <string name="pref_category_advancedSettings">Advanced Settings</string>
+    <string name="pref_checkbox_enableBackgroundDimming_title">Enable Dimming Background</string>
 </resources>

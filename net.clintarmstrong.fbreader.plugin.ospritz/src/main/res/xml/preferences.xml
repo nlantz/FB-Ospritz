@@ -37,6 +37,10 @@
                 android:dialogIcon="@android:drawable/ic_dialog_info"
                 android:dependency="pref_checkbox_backgroundColor"/>
         </PreferenceScreen>
+        <CheckBoxPreference
+            android:key="pref_checkbox_enableBackgroundDimming"
+            android:title="@string/pref_checkbox_enableBackgroundDimming_title"
+            android:defaultValue="true" />
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/pref_category_windowPosition_title">
