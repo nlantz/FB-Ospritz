@@ -6,9 +6,13 @@ A Open Spritz plugin for FB Reader.
 Looking for feedback from beta testers. Get the beta in [Google Play](https://play.google.com/apps/testing/net.clintarmstrong.fbreader.plugin.ospritz)
 or [directly](https://github.com/clinta/FB-Ospritz/raw/master/net.clintarmstrong.fbreader.plugin.ospritz/net.clintarmstrong.fbreader.plugin.ospritz.apk).
 
-Implements [SpritzerTextView](https://github.com/andrewgiang/SpritzerTextView)
+Recent changes. Lots of new options available in the settings menu. Detailed descriptions are [here](https://github.com/clinta/FB-Ospritz/blob/master/preferences.md).
+New features include: Custom delays for short and long words, custom delays for punctuation and paragraph splits. Custom window positions.
 
-Note: This library has nothing to do with SpritzInc.
+Latest version Implements my own [TextSpritzer](https://github.com/clinta/TextSpritzer) library, a fork of [SpritzerTextView](https://github.com/andrewgiang/SpritzerTextView) that adds a multithreaded
+queue where strings can be pre-parsed while they're being read, as well as additional callbacks needed for managing the queue. This design should allow for more complicated parsing rules in the future.
+
+Note: This project has nothing to do with SpritzInc.
 
 License
 ------------
