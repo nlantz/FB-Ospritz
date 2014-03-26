@@ -395,6 +395,13 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
             params.width = WindowManager.LayoutParams.WRAP_CONTENT;
             getWindow().setAttributes(params);
         }
+        if (!myPreferences.getBoolean("pref_checkbox_enableWpmBar", true)) {
+            findViewById(R.id.seekbar_wpm).setVisibility(View.GONE);
+            findViewById(R.id.tv_wpm).setVisibility(View.GONE);
+        } else {
+            findViewById(R.id.seekbar_wpm).setVisibility(View.VISIBLE);
+            findViewById(R.id.tv_wpm).setVisibility(View.VISIBLE);
+        }
         View view = getWindow().getDecorView();
         WindowManager.LayoutParams lp = (WindowManager.LayoutParams) view.getLayoutParams();
         try {
