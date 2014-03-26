@@ -3,6 +3,9 @@ FB-Ospritz
 
 A Open Spritz plugin for FB Reader.
 
+Looking for feedback from beta testers. Get the beta in [Google Play](https://play.google.com/apps/testing/net.clintarmstrong.fbreader.plugin.ospritz)
+or [directly](https://github.com/clinta/FB-Ospritz/raw/master/net.clintarmstrong.fbreader.plugin.ospritz/net.clintarmstrong.fbreader.plugin.ospritz.apk).
+
 Implements [SpritzerTextView](https://github.com/andrewgiang/SpritzerTextView)
 
 Note: This library has nothing to do with SpritzInc.
