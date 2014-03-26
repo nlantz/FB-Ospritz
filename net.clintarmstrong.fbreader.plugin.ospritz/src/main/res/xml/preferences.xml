@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
         android:title="@string/pref_category_theme_title">
         <ListPreference
@@ -81,13 +80,13 @@
             <EditTextPreference
                 android:key="pref_text_delayByLetterMaxMultiplier"
                 android:title="@string/pref_text_delayByLetterMaxMultiplier_title"
-                android:defaultValue="2.8"
+                android:defaultValue="1.5"
                 android:inputType="numberDecimal"
                 android:dependency="pref_checkbox_delayByLetter"/>
             <EditTextPreference
                 android:key="pref_text_delayByLetterMinMultiplier"
                 android:title="@string/pref_text_delayByLetterMinMultiplier_title"
-                android:defaultValue="0.22"
+                android:defaultValue="0.75"
                 android:inputType="numberDecimal"
                 android:dependency="pref_checkbox_delayByLetter"/>
         </PreferenceCategory>
@@ -137,7 +136,7 @@
             <EditTextPreference
                 android:key="pref_text_paragraphDelayAdd"
                 android:title="@string/pref_text_paragraphDelayAdd_title"
-                android:defaultValue="3"
+                android:defaultValue="2"
                 android:inputType="numberDecimal"
                 android:dependency="pref_checkbox_paragraphDelay"/>
         </PreferenceCategory>

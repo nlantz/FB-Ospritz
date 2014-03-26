@@ -4,10 +4,19 @@
 
 package org.geometerplus.android.fbreader.api;
 
-import java.util.*;
-
-import android.content.*;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.IBinder;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ApiClientImplementation implements ServiceConnection, Api, ApiMethods {
 	public static interface ConnectionListener {
@@ -61,6 +70,7 @@ public class ApiClientImplementation implements ServiceConnection, Api, ApiMetho
 			try {
 				myContext.unbindService(this);
 			} catch (IllegalArgumentException e) {
+                e.printStackTrace();
 			}
 			myInterface = null;
 		}

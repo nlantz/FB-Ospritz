@@ -47,9 +47,8 @@ import java.util.Queue;
 
 public class SpritzActivity extends Activity implements ApiClientImplementation.ConnectionListener {
 
-    public static final String TAG = SpritzActivity.class.getName();
+    private static final String TAG = SpritzActivity.class.getName();
     private SpritzerTextView mSpritzerTextView;
-    private Spritzer mSpritzer;
     private SeekBar mSeekBarTextSize;
     private SeekBar mSeekBarWpm;
     private TextView wpmTV;
@@ -59,14 +58,12 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
     private SharedPreferences.Editor myEditor;
     private int myParagraphIndex = -1;
     private int myParagraphsNumber;
-    private boolean myIsActive = false;
     private ApiClientImplementation myApi;
     private volatile PowerManager.WakeLock myWakeLock;
     private int initialTheme;
     private boolean initialTextColorEnabled = false;
     private boolean initialBackgroundColorEnabled = false;
-    protected static int PROCESS_AHEAD = 2;
-    private WordStrategy wordStrategyChangeChecker;
+    private static int PROCESS_AHEAD = 2;
 
 
     private void setListener(int id, View.OnClickListener listener) {
@@ -94,7 +91,7 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         wpmTV = (TextView) findViewById(R.id.tv_wpm);
         TextSizeTV = (TextView) findViewById(R.id.tv_textSize);
         mSpritzerTextView = (SpritzerTextView) findViewById(R.id.spritzTV);
-        mSpritzer = mSpritzerTextView.getSpritzer();
+        Spritzer mSpritzer = mSpritzerTextView.getSpritzer();
         mSeekBarTextSize = (SeekBar) findViewById(R.id.seekbar_textSize);
         mSeekBarWpm = (SeekBar) findViewById(R.id.seekbar_wpm);
 
@@ -135,6 +132,7 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         }
     }
 
+    private int currentReadingParagraphIndex;
     private void setCallbackListener(){
         mSpritzerTextView.setCallbackListener(new Spritzer.CallBackListener() {
             @Override
@@ -168,28 +166,28 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         mSpritzerTextView.setWordsRemainingToTriggerListener(0);
     }
 */
-    public boolean delayByLetter;
-    public float delayByLetterMaxMultiplier;
-    public float delayByLetterMinMultiplier;
-    public boolean longWordDelay;
-    public int longWordCharacters;
-    public float longWordDelayAdd;
-    public boolean punctuationDelay;
-    public char[] punctuationDelayCharacters;
-    public float punctuationDelayAdd;
-    public boolean paragraphDelay;
-    public float paragraphDelayAdd;
+    private boolean delayByLetter;
+    private float delayByLetterMaxMultiplier;
+    private float delayByLetterMinMultiplier;
+    private boolean longWordDelay;
+    private int longWordCharacters;
+    private float longWordDelayAdd;
+    private boolean punctuationDelay;
+    private char[] punctuationDelayCharacters;
+    private float punctuationDelayAdd;
+    private boolean paragraphDelay;
+    private float paragraphDelayAdd;
 
     private void grabPreferences(){
         delayByLetter = myPreferences.getBoolean("pref_checkbox_delayByLetter", true);
-            delayByLetterMaxMultiplier = Float.parseFloat(myPreferences.getString("pref_text_delayByLetterMaxMultiplier", "2.8"));
-            delayByLetterMinMultiplier = Float.parseFloat(myPreferences.getString("pref_text_delayByLetterMinMultiplier", "0.22"));
+            delayByLetterMaxMultiplier = Float.parseFloat(myPreferences.getString("pref_text_delayByLetterMaxMultiplier", "1.5"));
+            delayByLetterMinMultiplier = Float.parseFloat(myPreferences.getString("pref_text_delayByLetterMinMultiplier", "0.75"));
         longWordDelay = myPreferences.getBoolean("pref_checkbox_longWordDelay", false);
             longWordCharacters = Integer.parseInt(myPreferences.getString("pref_text_longWordCharacters", "7"));
             longWordDelayAdd = Float.parseFloat(myPreferences.getString("pref_text_longWordDelayAdd", "2"));
         punctuationDelay = myPreferences.getBoolean("pref_checkbox_punctuationDelay", true);
             punctuationDelayCharacters = myPreferences.getString("pref_text_punctuationDelayCharacters", ",;:.?!/").toCharArray();
-            punctuationDelayAdd = Float.parseFloat(myPreferences.getString("pref_text_punctuationDelayAdd", "1"));
+            punctuationDelayAdd = Float.parseFloat(myPreferences.getString("pref_text_punctuationDelayAdd", "1.5"));
         paragraphDelay = myPreferences.getBoolean("pref_checkbox_paragraphDelay", true);
             paragraphDelayAdd = Float.parseFloat(myPreferences.getString("pref_text_paragraphDelayAdd", "2"));
     }
@@ -198,8 +196,8 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
     private void setWordStrategy() {
         mSpritzerTextView.setWordStrategy(new WordStrategy() {
             // import the default word strategy so we can use some of it's useful methods
-            protected static final int MAX_WORD_LENGTH = 13;
-            protected static final float AVERAGE_WORD_LENGTH = (float) 4.5;
+            static final int MAX_WORD_LENGTH = 13;
+            static final float AVERAGE_WORD_LENGTH = (float) 4.5;
 
             @Override
             public WordObj parseWord(String input){
@@ -210,16 +208,16 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
 
                 // if there is no text remaining, set callback to 1 so that this thread can be notified.
                 // Useful for adding more text at regular intervals.
-                Log.d(TAG, "word array length: " + wordArray.length);
 
                 if (nextCallback) {
                     retWordObj.callback = 1;
                     nextCallback = false;
                 }
-
-                if (wordArray[1].toString().length() > 0) {
+                // Log.d(TAG, "Parsing word: " + wordArray[0]);
+                if (wordArray[1].length() > 0) {
                     retWordObj.remainingWords = wordArray[1];
                 } else {
+                  //   Log.d(TAG, "setting nextcallback true");
                     nextCallback = true;
                 }
                 String word = wordArray[0];
@@ -252,7 +250,7 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
                     }
                 }
                 if (paragraphDelay){
-                    if (wordArray[1].toString().length() <= 0) delayMultiplier += paragraphDelayAdd;
+                    if (wordArray[1].length() <= 0) delayMultiplier += paragraphDelayAdd;
                 }
 
                 retWordObj.parsedWord = word;
@@ -291,7 +289,7 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
 
         // Setup listener for changes.
         mSeekBarWpm.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            int minWPM = Integer.parseInt(myPreferences.getString("pref_text_minWPM", "100"));
+            final int minWPM = Integer.parseInt(myPreferences.getString("pref_text_minWPM", "100"));
             @Override
             public void onProgressChanged(SeekBar seekBar, int wpmSeekBarProgress, boolean fromUser) {
                 // math needed to turn progress from 1 to 100 into a value between min and max
@@ -331,7 +329,7 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
 
         // listen for changes to size bar
         mSeekBarTextSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            int minTextSize = Integer.parseInt(myPreferences.getString("pref_text_minTextSize", "4"))*10;
+            final int minTextSize = Integer.parseInt(myPreferences.getString("pref_text_minTextSize", "4"))*10;
             @Override
             public void onProgressChanged(SeekBar seekBar, int textSizeSeekBarProgress, boolean fromUser) {
                 int textSize = textSizeSeekBarProgress + minTextSize;
@@ -379,19 +377,19 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
     }
 
     private void resetReadingPosition(){
-        while (readingParagraphQueue.size() > 1) readingParagraphQueue.remove();
-        myParagraphIndex = readingParagraphQueue.remove();
+        readingParagraphQueue.clear();
+        myParagraphIndex = currentReadingParagraphIndex;
+        nextCallback = false;
         mSpritzerTextView.setSpritzText(gotoNextParagraph());
-        highlightParagraph(readingParagraphQueue.remove());
+    //    nextCallback = false;
+        highlightParagraph(readingParagraphQueue.peek());
     }
 
     private void preProcessText(){
-        Log.d(TAG,"Running preprocess, queue size: " + readingParagraphQueue.size());
         while (readingParagraphQueue.size() < PROCESS_AHEAD){
             ++myParagraphIndex;
             mSpritzerTextView.addSpritzText(gotoNextParagraph());
         }
-        Log.d(TAG,"Finished preprocess, queue size: " + readingParagraphQueue.size());
     }
 
     private void setupButtons(){
@@ -406,6 +404,7 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
                 stopSpritzing();
                 if (myParagraphIndex < myParagraphsNumber) {
                     resetReadingPosition();
+                    Log.d(TAG, "nextcallback: " + nextCallback);
                     ++myParagraphIndex;
                     mSpritzerTextView.setSpritzText(gotoNextParagraph());
                     highlightParagraph(readingParagraphQueue.remove());
@@ -436,8 +435,8 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
     }
 
     private volatile int myInitializationStatus;
-    private static int API_INITIALIZED = 1;
-    private static int FULLY_INITIALIZED = API_INITIALIZED;
+    private final static int API_INITIALIZED = 1;
+    private final static int FULLY_INITIALIZED = API_INITIALIZED;
 
     public void onConnected() {
         if (myInitializationStatus != FULLY_INITIALIZED) {
@@ -463,6 +462,7 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
             showErrorMessage(getText(R.string.initialization_error), true);
             e.printStackTrace();
         }
+        nextCallback = false;
         mSpritzerTextView.setSpritzText(gotoNextParagraph());
         highlightParagraph(readingParagraphQueue.remove());
         preProcessText();
@@ -545,7 +545,7 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
     }
 
     private synchronized void setActive(final boolean active) {
-        myIsActive = active;
+        boolean myIsActive = active;
 
         runOnUiThread(new Runnable() {
             public void run() {
@@ -593,6 +593,7 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
     }
 
     private void highlightParagraph(int paragraphIndex) {
+        currentReadingParagraphIndex = paragraphIndex;
         try {
             if (!"".equals(myApi.getParagraphText(paragraphIndex)) && !myApi.isPageEndOfText()) {
                 myApi.setPageStart(new TextPosition(paragraphIndex, 0, 0));

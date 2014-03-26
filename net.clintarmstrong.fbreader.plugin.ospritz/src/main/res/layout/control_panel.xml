@@ -26,7 +26,6 @@
             app:clickControls="true"
             android:layout_width="wrap_content"
             android:layout_centerHorizontal="true"/>
-        />
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
@@ -69,24 +68,28 @@
             android:layout_height="50dip"
             android:layout_weight="1"
             android:src="@android:drawable/ic_media_previous"
+            android:contentDescription="@string/ImageButton_previousParagraph_contentDescription"
             />
         <ImageButton android:id="@+id/button_close"
             android:layout_width="70dip"
             android:layout_height="50dip"
             android:layout_weight="1"
             android:src="@drawable/ic_media_stop"
+            android:contentDescription="@string/ImageButton_close_contentDescription"
             />
         <ImageButton android:id="@+id/button_settings"
             android:layout_width="70dip"
             android:layout_height="50dip"
             android:layout_weight="0"
             android:src="@android:drawable/ic_menu_preferences"
-            android:onClick="launchSettings" />
+            android:onClick="launchSettings"
+            android:contentDescription="@string/ImageButton_settings_contentDescription"/>
         <ImageButton android:id="@+id/button_nextParagraph"
             android:layout_width="70dip"
             android:layout_height="50dip"
             android:layout_weight="1"
             android:src="@android:drawable/ic_media_next"
+            android:contentDescription="@string/ImageButton_nextParagraph_contentDescription"
             />
         </LinearLayout>
     <LinearLayout
@@ -97,12 +100,14 @@
             android:layout_height="50dip"
             android:layout_weight="2"
             android:src="@android:drawable/ic_media_play"
+            android:contentDescription="@string/ImageButton_play_contentDescription"
             />
         <ImageButton android:id="@+id/button_pause"
             android:layout_width="70dip"
             android:layout_height="50dip"
             android:layout_weight="2"
             android:src="@android:drawable/ic_media_pause"
+            android:contentDescription="@string/ImageButton_pause_contentDescription"
             android:visibility="gone"
             />
     </LinearLayout>

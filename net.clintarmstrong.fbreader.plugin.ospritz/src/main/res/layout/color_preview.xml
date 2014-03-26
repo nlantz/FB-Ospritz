@@ -10,6 +10,7 @@
     <ImageView android:id="@+id/colorPreviewImage"
         android:layout_height="28dp"
         android:layout_width="28dp"
-        android:src="@drawable/color_preview_rectangle"/>
+        android:src="@drawable/color_preview_rectangle"
+        android:contentDescription="@string/imageView_colorPreviewImage_contentDescription"/>
 
 </LinearLayout>
