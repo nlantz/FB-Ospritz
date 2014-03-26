@@ -47,4 +47,15 @@
     <string name="ImageButton_nextParagraph_contentDescription">Next Paragraph</string>
     <string name="ImageButton_play_contentDescription">Play</string>
     <string name="ImageButton_pause_contentDescription">Pause</string>
+    <string name="pref_checkbox_enableWpmBar_title">Enable WPM Bar</string>
+    <string name="pref_checkbox_enableTextSizeBar_title">Enable Text Size Bar</string>
+    <string name="tv_tv_textSizeExplanation_text">After configuring text size, hide this slider bar in settings, and the window width will match the width of the spritz text.</string>
+    <string name="pref_category_windowPosition_title">Window Position</string>
+    <string name="pref_list_windowPosition_title">Window Position</string>
+    <string name="pref_list_windowPositionHorizontal_title">Horizontal Window Position</string>
+    <string name="pref_list_windowPositionHorizontal_dialogTitle">Choose a Horizontal Window Position</string>
+    <string name="pref_list_windowPositionVertical_title">Vertical Window Position</string>
+    <string name="pref_list_windowPositionVertical_dialogTitle">Choose a Virtical Window Position</string>
+    <string name="pref_category_controls_title">Controls</string>
+    <string name="pref_category_advancedSettings">Advanced Settings</string>
 </resources>

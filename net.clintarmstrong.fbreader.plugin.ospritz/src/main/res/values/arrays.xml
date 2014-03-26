@@ -10,4 +10,24 @@
         <item>DarkTheme</item>
         <item>BlackTheme</item>
     </string-array>
+    <string-array name="pref_list_windowPositionHorizontal_entries">
+        <item>Left</item>
+        <item>Center</item>
+        <item>Right</item>
+    </string-array>
+    <string-array name="pref_list_windowPositionHorizontal_entryValues">
+        <item>3</item>
+        <item>1</item>
+        <item>5</item>
+    </string-array>
+    <string-array name="pref_list_windowPositionVertical_entries">
+        <item>Top</item>
+        <item>Center</item>
+        <item>Bottom</item>
+    </string-array>
+    <string-array name="pref_list_windowPositionVertical_entryValues">
+        <item>48</item>
+        <item>16</item>
+        <item>80</item>
+    </string-array>
 </resources>

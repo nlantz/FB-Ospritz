@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.SeekBar;
@@ -77,7 +78,7 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         myPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         // store initial theme, so we can tell if it has changed and if we need to reload it later.
-        initialTheme = getResources().getIdentifier(myPreferences.getString("theme_style", getString(R.string.prev_list_theme_defaultValue)), "style", getPackageName());
+        initialTheme = getResources().getIdentifier(myPreferences.getString("pref_list_theme", getString(R.string.prev_list_theme_defaultValue)), "style", getPackageName());
         this.setTheme(initialTheme);
 
         setContentView(R.layout.control_panel);
@@ -130,6 +131,12 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
+        mSpritzerTextView.post(new Runnable() {
+            @Override
+            public void run() {
+                changeWindowLayout();
+            }
+        });
     }
 
     private int currentReadingParagraphIndex;
@@ -262,7 +269,7 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
     }
 
     private void setThemeFromPref(){
-        int theme_style = getResources().getIdentifier(myPreferences.getString("theme_style", getString(R.string.prev_list_theme_defaultValue)), "style", getPackageName());
+        int theme_style = getResources().getIdentifier(myPreferences.getString("pref_list_theme", getString(R.string.prev_list_theme_defaultValue)), "style", getPackageName());
         boolean custom_text_color_enabled = myPreferences.getBoolean("custom_text_color_enabled", false);
         boolean custom_background_color_enabled = myPreferences.getBoolean("custom_background_color_enabled", false);
     //    this.setTheme(theme_style);
@@ -329,12 +336,12 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
 
         // listen for changes to size bar
         mSeekBarTextSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            final int minTextSize = Integer.parseInt(myPreferences.getString("pref_text_minTextSize", "4"))*10;
+            final int minTextSize = Integer.parseInt(myPreferences.getString("pref_text_minTextSize", "10"))*10;
             @Override
             public void onProgressChanged(SeekBar seekBar, int textSizeSeekBarProgress, boolean fromUser) {
                 int textSize = textSizeSeekBarProgress + minTextSize;
                 mSpritzerTextView.setTextSize(textSize/10);
-                TextSizeTV.setText(getText(R.string.tv_textSize_text) + " " + (float) textSize/10);
+                TextSizeTV.setText(getText(R.string.tv_textSize_text) + " " + (float) textSize / 10);
                 setPrefInt("pref_int_textSize", textSize);
             }
 
@@ -344,6 +351,7 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                Toast.makeText(SpritzActivity.this, R.string.tv_tv_textSizeExplanation_text, Toast.LENGTH_LONG).show();
             }
         });
 
@@ -356,24 +364,55 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
             textSize = myPreferences.getInt("pref_int_textSize", 200);
         }
 
-        int minTextSize = Integer.parseInt(myPreferences.getString("pref_text_minTextSize", "4"))*10;
-        int maxTextSize = Integer.parseInt(myPreferences.getString("pref_text_minTextSize", "50"))*10;
+        int minTextSize = Integer.parseInt(myPreferences.getString("pref_text_minTextSize", "10"))*10;
+        int maxTextSize = Integer.parseInt(myPreferences.getString("pref_text_maxTextSize", "50"))*10;
         // fix bad values
         if (textSize > maxTextSize || textSize < minTextSize) {
+            Log.d(TAG, "Bad textSize being removed.");
+            Log.d(TAG, "textSize: " + textSize);
+            Log.d(TAG, "maxTextSize: " + maxTextSize);
+            Log.d(TAG, "minTextSize: " + minTextSize);
             removePref("pref_int_textSize");
             textSize = myPreferences.getInt("pref_int_textSize", 200);
         }
         // fix bad values
         if (minTextSize >= maxTextSize) {
             removePref("pref_text_minTextSize"); removePref("pref_text_minTextSize");
-            minTextSize = Integer.parseInt(myPreferences.getString("pref_text_minTextSize", "4"))*10;
-            maxTextSize = Integer.parseInt(myPreferences.getString("pref_text_minTextSize", "50"))*10;
+            minTextSize = Integer.parseInt(myPreferences.getString("pref_text_minTextSize", "10"))*10;
+            maxTextSize = Integer.parseInt(myPreferences.getString("pref_text_maxTextSize", "50"))*10;
         }
         // math needed to allow .1 font sizes
         mSeekBarTextSize.setMax(maxTextSize - minTextSize);
         int sProgress = (textSize - minTextSize);
         mSeekBarTextSize.setProgress(sProgress);
+        Log.d(TAG,"text size is: " + textSize);
         TextSizeTV.setText(getText(R.string.tv_textSize_text) + " " + (float) textSize/10);
+    }
+
+
+    private void changeWindowLayout(){
+        if (!myPreferences.getBoolean("pref_checkbox_enableTextSizeBar", true) && mSpritzerTextView.getWidth() != 0) {
+            WindowManager.LayoutParams params = getWindow().getAttributes();
+            params.width = mSpritzerTextView.getWidth();
+            getWindow().setAttributes(params);
+            findViewById(R.id.seekbar_textSize).setVisibility(View.GONE);
+            findViewById(R.id.tv_textSize).setVisibility(View.GONE);
+        } else {
+            findViewById(R.id.seekbar_textSize).setVisibility(View.VISIBLE);
+            findViewById(R.id.tv_textSize).setVisibility(View.VISIBLE);
+            WindowManager.LayoutParams params = getWindow().getAttributes();
+            params.width = WindowManager.LayoutParams.WRAP_CONTENT;
+            getWindow().setAttributes(params);
+        }
+        View view = getWindow().getDecorView();
+        WindowManager.LayoutParams lp = (WindowManager.LayoutParams) view.getLayoutParams();
+        try {
+            lp.gravity = Integer.parseInt(myPreferences.getString("pref_list_windowPositionHorizontal", Integer.toString(Gravity.CENTER_HORIZONTAL))) | Integer.parseInt(myPreferences.getString("pref_list_windowPositionVertical", Integer.toString(Gravity.CENTER_VERTICAL)));
+        } catch (NumberFormatException e) {
+            removePref("pref_list_windowPositionHorizontal");
+            removePref("pref_list_windowPositionVertical");
+        }
+        getWindowManager().updateViewLayout(view, lp);
     }
 
     private void resetReadingPosition(){
