@@ -417,9 +417,6 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         readingParagraphQueue.clear();
         myParagraphIndex = currentReadingParagraphIndex;
         nextCallback = false;
-        mSpritzerTextView.setSpritzText(gotoNextParagraph());
-    //    nextCallback = false;
-        highlightParagraph(readingParagraphQueue.peek());
     }
 
     private void preProcessText(){
