@@ -11,14 +11,22 @@ The latest version includes several advanced preferences
     - Custom Colors
         - Text Color
         - Background Color
+- Window Position: Adjust where the window appears, can be very useful when combined with a dynamic window size, allowing you to see supplemental materials in the book without closing the plugin.
+    - Horizontal Position
+        - Left
+        - Center
+        - Right
+    - Vertical Position
+        - Left
+        - Center
+        - Right
 - Slider Preferences
     - WPM
         - Enable WPM Bar: Enables or disables the WPM slider. Not sure why you'd want to disable it, but it's not my job to tell you how you should use the program.
         - Min WPM: Sets the minimum WPM of the slider displayed on the main window
         - Max WPM: Sets the maximum WPM of the slider displayed on the main window
     - Text Size
-        - Enable Text Size: Enables or disables the Text Slider slider. Since the text size slider now also controls the entire window size, you might want to enable
-        it long enough to configure it then turn it off.
+        - Enable Text Size: Enables or disables the Text Slider slider. Disabling this allows the window to be automatically sized to the width of the text view.
         - Min Text Size: Sets the minimum text size of the slider displayed on the main window
         - Max Text Size: Sets the maximum text size of the slider displayed on the main window.
 - Speed Settings
