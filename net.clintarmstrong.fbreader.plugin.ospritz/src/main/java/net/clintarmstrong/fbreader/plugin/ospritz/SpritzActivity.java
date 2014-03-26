@@ -25,7 +25,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -146,7 +145,6 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
             public void onCallBackListener(int callback) {
                 switch (callback) {
                     case 1:
-                        Log.d(TAG, "Got Callback" + callback);
                         ++myParagraphIndex;
                         mSpritzerTextView.addSpritzText(gotoNextParagraph());
                         highlightParagraph(readingParagraphQueue.remove());
@@ -220,11 +218,9 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
                     retWordObj.callback = 1;
                     nextCallback = false;
                 }
-                // Log.d(TAG, "Parsing word: " + wordArray[0]);
                 if (wordArray[1].length() > 0) {
                     retWordObj.remainingWords = wordArray[1];
                 } else {
-                  //   Log.d(TAG, "setting nextcallback true");
                     nextCallback = true;
                 }
                 String word = wordArray[0];
@@ -368,10 +364,6 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         int maxTextSize = Integer.parseInt(myPreferences.getString("pref_text_maxTextSize", "50"))*10;
         // fix bad values
         if (textSize > maxTextSize || textSize < minTextSize) {
-            Log.d(TAG, "Bad textSize being removed.");
-            Log.d(TAG, "textSize: " + textSize);
-            Log.d(TAG, "maxTextSize: " + maxTextSize);
-            Log.d(TAG, "minTextSize: " + minTextSize);
             removePref("pref_int_textSize");
             textSize = myPreferences.getInt("pref_int_textSize", 200);
         }
@@ -385,7 +377,6 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
         mSeekBarTextSize.setMax(maxTextSize - minTextSize);
         int sProgress = (textSize - minTextSize);
         mSeekBarTextSize.setProgress(sProgress);
-        Log.d(TAG,"text size is: " + textSize);
         TextSizeTV.setText(getText(R.string.tv_textSize_text) + " " + (float) textSize/10);
     }
 
@@ -443,7 +434,6 @@ public class SpritzActivity extends Activity implements ApiClientImplementation.
                 stopSpritzing();
                 if (myParagraphIndex < myParagraphsNumber) {
                     resetReadingPosition();
-                    Log.d(TAG, "nextcallback: " + nextCallback);
                     ++myParagraphIndex;
                     mSpritzerTextView.setSpritzText(gotoNextParagraph());
                     highlightParagraph(readingParagraphQueue.remove());
