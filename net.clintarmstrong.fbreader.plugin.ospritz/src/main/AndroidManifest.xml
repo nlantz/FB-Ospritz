@@ -2,7 +2,7 @@
     package="net.clintarmstrong.fbreader.plugin.ospritz">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <application android:label="@string/title" android:icon="@drawable/fbreader_plugin">
+    <application android:label="@string/title" android:icon="@drawable/fbospritz">
         <receiver android:name="net.clintarmstrong.fbreader.plugin.ospritz.PluginInfo">
             <intent-filter>
                 <action android:name="android.fbreader.action.plugin.REGISTER" />
